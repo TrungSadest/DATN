@@ -57,8 +57,10 @@ public class Users {
     @Column(name = "updated_by")
     private String updatedBy;
 
-//    @Column(name = "role_id")
-//    private String roleId;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "role_code")
+    private Roles role;
 
 
     public Integer getUserId() {
@@ -173,8 +175,4 @@ public class Users {
         this.role = role;
     }
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
 }

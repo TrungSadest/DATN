@@ -6,6 +6,9 @@ public class Constants {
     public static final String[] WHITE_ROLE_R001 = { "/api/category/**" };
 
     public static final String ROLE_R000 = "R000";
+    public static final String ROLE_R001 = "R001";
+    public static final String ROLE_R002 = "R002";
+    public static final String ROLE_R003 = "R003";
 
     public static final String BAD_CREDENTIALS = "BAD_CREDENTIALS";
     public static final String USERNAME_IS_EXIST = "USERNAME_IS_EXIST";

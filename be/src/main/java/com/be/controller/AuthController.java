@@ -3,6 +3,7 @@ package com.be.controller;
 import com.be.config.jwt.JwtUtil;
 import com.be.config.jwt.MyUserDetailsService;
 import com.be.constant.Constants;
+import com.be.entity.Roles;
 import com.be.entity.Users;
 import com.be.model.ResponseData;
 import com.be.model.request.LoginRequest;
@@ -89,6 +90,7 @@ public class AuthController {
            newUser.setAddress(registerRequest.getAddress());
            newUser.setCreatedDate(new Date());
            newUser.setDel(false);
+           newUser.setRole(new Roles(Constants.ROLE_R003));
            userRepository.save(newUser);
 
            responseData.setStatus(true);

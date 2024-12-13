@@ -12,15 +12,11 @@ import java.util.List;
 @Table(name = "roles")
 public class Roles {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Integer roleId;
+    @Column(name = "role_code")
+    private String roleCode;
 
     @Column(name = "role_name")
     private String roleName;
-
-    @Column(name = "role_code")
-    private String roleCode;
 
     @Column(name = "description")
     private String description;
@@ -31,12 +27,11 @@ public class Roles {
     @OneToMany(mappedBy = "role")
     private List<Users> users;
 
-    public Integer getRoleId() {
-        return roleId;
+    public Roles() {
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public Roles(String roleCode) {
+        this.roleCode = roleCode;
     }
 
     public String getRoleName() {
