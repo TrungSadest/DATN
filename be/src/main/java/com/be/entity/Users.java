@@ -17,8 +17,9 @@ import java.util.Date;
 //@NoArgsConstructor
 public class Users {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private String userId;
+    private Integer userId;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -59,11 +60,12 @@ public class Users {
 //    @Column(name = "role_id")
 //    private String roleId;
 
-    public String getUserId() {
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
