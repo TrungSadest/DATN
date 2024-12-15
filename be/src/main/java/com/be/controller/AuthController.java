@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
-@RequestMapping("api/public/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
