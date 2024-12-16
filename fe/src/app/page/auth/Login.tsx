@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginRequest } from "../../model/LoginRequest";
+import { AuthService } from "../../service/AuthService";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [model, setModel] = useState(new LoginRequest("", ""));
+
+  const changeInput = (data: any) => {
+    const value = data.target.value;
+    const name = data.target.name;
+    setModel({
+      ...model,
+      [name]: value,
+    });
+  };
+  const handleLogin = () => {
+    console.log(model);
+    AuthService.getInstance().login(model).then(res=>{
+      console.log(res);
+      toast.success("Đăng nhập thành công");
+    }).catch(e=>{
+      console.log(e);
+    })
+  };
   return (
     <>
       <main>
@@ -38,10 +60,11 @@ export default function Login() {
                         </p>
                       </div>
 
-                      <form className="row g-3 needs-validation">
+                      <div className="row g-3 needs-validation">
                         <div className="col-12">
                           <label className="form-label">Username</label>
                           <input
+                            onChange={changeInput}
                             type="text"
                             name="username"
                             className="form-control"
@@ -55,6 +78,7 @@ export default function Login() {
                         <div className="col-12">
                           <label className="form-label">Password</label>
                           <input
+                            onChange={changeInput}
                             type="password"
                             name="password"
                             className="form-control"
@@ -81,8 +105,8 @@ export default function Login() {
                         </div>
                         <div className="col-12">
                           <button
+                            onClick={handleLogin}
                             className="btn btn-primary w-100"
-                            type="submit"
                           >
                             Login
                           </button>
@@ -90,10 +114,17 @@ export default function Login() {
                         <div className="col-12">
                           <p className="small mb-0">
                             Don't have account?{" "}
-                            <a onClick={()=>{navigate('/register')}} className="pointer">Create an account</a>
+                            <a
+                              onClick={() => {
+                                navigate("/register");
+                              }}
+                              className="pointer"
+                            >
+                              Create an account
+                            </a>
                           </p>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
