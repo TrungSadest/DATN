@@ -21,7 +21,7 @@ body {
 
 a {
   color: #4154f1;
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 a:hover {
@@ -365,11 +365,13 @@ h6 {
 }
 
 .logo img {
-  max-height: 40px;
+  max-height: 26px;
+  margin-right: 6px;
 }
 
 .logo span {
   font-size: 26px;
+  font-weight: 700;
   color: #012970;
   font-family: "Nunito", sans-serif;
 }

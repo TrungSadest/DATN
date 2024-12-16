@@ -1,56 +1,107 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="container">
-        <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
-          <h1>Heaven Shop</h1>
-          <div style={{ width: "430px" }} className="card p-2">
-            <div className="card-body">
-              <div className="mb-3 text-center">
-                <h3 className="card-title text-center pb-0 fs-4">
-                  Login to Your Account
-                </h3>
-                <span className="small">
-                  Enter your username & password to login
-                </span>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="">Username</label>
-                <input className="form-control" type="text" />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="">Password</label>
-                <input
-                  className="form-control"
-                  type="password"
-                  name="password"
-                  id="password"
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  name="rememberMe"
-                  id="rememberMe"
-                />
-                <label className="ms-2 form-check-label" htmlFor="">
-                  Remember me
-                </label>
-              </div>
-              <div className="mb-3">
-                <button className="w-100 btn btn-primary">Login</button>
-              </div>
-              <div>
-                <span className="me-2">Don't have account?</span>
-                <a href="">Create an account</a>
+      <main>
+        <div className="container">
+          <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                  <div className="d-flex justify-content-center py-4">
+                    <a
+                      href="index.html"
+                      className="logo d-flex align-items-center w-auto"
+                    >
+                      <img src="/assets/img/logo-heaven.svg" alt="" />
+                      <span
+                        className="fw-bold d-none d-lg-block"
+                        style={{ color: "#EF8121" }}
+                      >
+                        Heaven
+                      </span>
+                      <span className="fw-bold d-none d-lg-block">Shop</span>
+                    </a>
+                  </div>
+
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      <div className="pt-4 pb-2">
+                        <h5 className="card-title text-center pb-0 fs-4">
+                          Login to Your Account
+                        </h5>
+                        <p className="text-center small">
+                          Enter your username & password to login
+                        </p>
+                      </div>
+
+                      <form className="row g-3 needs-validation">
+                        <div className="col-12">
+                          <label className="form-label">Username</label>
+                          <input
+                            type="text"
+                            name="username"
+                            className="form-control"
+                            id="yourUsername"
+                          />
+                          <div className="invalid-feedback">
+                            Please enter your username.
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <label className="form-label">Password</label>
+                          <input
+                            type="password"
+                            name="password"
+                            className="form-control"
+                            id="yourPassword"
+                          />
+                          <div className="invalid-feedback">
+                            Please enter your password!
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <div className="form-check">
+                            <input
+                              className="pointer form-check-input"
+                              type="checkbox"
+                              name="remember"
+                              value="true"
+                              id="rememberMe"
+                            />
+                            <label className="form-check-label">
+                              Remember me
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <button
+                            className="btn btn-primary w-100"
+                            type="submit"
+                          >
+                            Login
+                          </button>
+                        </div>
+                        <div className="col-12">
+                          <p className="small mb-0">
+                            Don't have account?{" "}
+                            <a onClick={()=>{navigate('/register')}} className="pointer">Create an account</a>
+                          </p>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     </>
   );
 }

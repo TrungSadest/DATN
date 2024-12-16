@@ -1,5 +1,6 @@
 import axios from "axios";
 import { LoginRequest } from "../model/LoginRequest";
+import { RegisterRequest } from "../model/RegisterRequest";
 
 export class AuthService {
   private static _authService: AuthService;
@@ -11,8 +12,13 @@ export class AuthService {
     return AuthService._authService;
   }
 
-  public static login(request: LoginRequest){
+  public login(request: LoginRequest){
     const url = process.env.REACT_APP_AUTH_URL + "/login";
+    return axios.post(url, request);
+  }
+
+  public register(request: RegisterRequest){
+    const url = process.env.REACT_APP_AUTH_URL + "/register";
     return axios.post(url, request);
   }
 }

@@ -6,20 +6,13 @@ export default function Header() {
 
     <div className="d-flex align-items-center justify-content-between">
       <a className="pointer logo d-flex align-items-center">
-        <img src="assets/img/logo2.png" alt=""/>
-        <span className="fw-bold d-none d-lg-block" style={{color: '#EF8121'}}>Online</span>
+        <img src="assets/img/logo-heaven.svg" alt=""/>
+        <span className="fw-bold d-none d-lg-block" style={{color: '#EF8121'}}>Heaven</span>
         <span className="fw-bold d-none d-lg-block">Shop</span>
       </a>
-      <i className="bi bi-list toggle-sidebar-btn"></i>
     </div>
     {/* <!-- End Logo --> */}
 
-    <div className="search-bar">
-      <form className="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword"/>
-        <button type="submit" title="Search"><i className="bi bi-search"></i></button>
-      </form>
-    </div>
     {/* <!-- End Search Bar --> */}
 
     <nav className="header-nav ms-auto">
