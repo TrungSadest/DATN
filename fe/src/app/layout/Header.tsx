@@ -1,6 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AuthConstant } from '../constant/authConstant';
+import Cookies from 'universal-cookie';
 
 export default function Header() {
+  const navigate = useNavigate();
+  const cookie = new Cookies();
+
+  const handleLogout = ()=>{
+    cookie.remove(AuthConstant.ACCESS_TOKEN);
+    navigate('/login');
+  }
+
   return (
     <header id="header" className="header fixed-top d-flex align-items-center">
 
@@ -219,7 +230,7 @@ export default function Header() {
             </li>
 
             <li>
-              <a className="dropdown-item d-flex align-items-center" href="#">
+              <a onClick={handleLogout} className="pointer dropdown-item d-flex align-items-center">
                 <i className="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>

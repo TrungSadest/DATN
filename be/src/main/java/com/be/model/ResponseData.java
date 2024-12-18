@@ -4,7 +4,7 @@ public class ResponseData {
     private String message;
     private String msgCode;
     private boolean status;
-    private Object data;
+    private Object responseData;
 
     public String getMessage() {
         return message;
@@ -30,11 +30,11 @@ public class ResponseData {
         this.status = status;
     }
 
-    public Object getData() {
-        return data;
+    public Object getResponseData() {
+        return responseData;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setResponseData(Object responseData) {
+        this.responseData = responseData;
     }
 }

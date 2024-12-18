@@ -3,12 +3,22 @@ import { RegisterRequest } from "../../model/RegisterRequest";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../service/AuthService";
 import { toast } from "react-toastify";
+import { useAppSelector } from "../../store/hook";
+import { RootState } from "../../store/store";
 
 export default function Register() {
   const [model, setModel] = useState(
     new RegisterRequest("", "", "", "", "", "")
   );
   const navigate = useNavigate();
+    const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
+
+  useEffect(()=>{
+      console.log(isLogin);
+      if (isLogin && isLogin === true) {
+        navigate('/');
+      }
+    },[isLogin, navigate])
 
   const changeInput = (data: any) => {
     const value = data.target.value;

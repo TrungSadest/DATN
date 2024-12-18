@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginRequest } from "../../model/LoginRequest";
 import { AuthService } from "../../service/AuthService";
 import { toast } from "react-toastify";
+import { HttpStatusCode } from "axios";
+import { Constant } from "../../constant/constant";
+import Cookies from "universal-cookie";
+import { AuthConstant } from "../../constant/authConstant";
+import { useAppSelector } from "../../store/hook";
+import { RootState } from "../../store/store";
 
 export default function Login() {
   const navigate = useNavigate();
+  const cookie = new Cookies();
+  const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
   const [model, setModel] = useState(new LoginRequest("", ""));
+
+  useEffect(()=>{
+    console.log(isLogin);
+    if (isLogin && isLogin === true) {
+      navigate('/');
+    }
+  },[isLogin, navigate])
 
   const changeInput = (data: any) => {
     const value = data.target.value;
@@ -17,12 +32,20 @@ export default function Login() {
     });
   };
   const handleLogin = () => {
-    console.log(model);
     AuthService.getInstance().login(model).then(res=>{
-      console.log(res);
-      toast.success("Đăng nhập thành công");
+      if (res && res.status === HttpStatusCode.Ok && res.data.status === true && res.data.responseData) {
+        const _token = res.data.responseData;
+        toast.success("Đăng nhập thành công");
+        const expires = new Date();
+        expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN)
+        cookie.remove(AuthConstant.ACCESS_TOKEN);
+        cookie.set(AuthConstant.ACCESS_TOKEN, _token, { path: '/', expires: expires })
+        navigate('/');
+      }else{
+        toast.warn("Tài khoản hoặc mật khẩu không đúng")
+      }
     }).catch(e=>{
-      console.log(e);
+      toast.error("Lỗi hệ thống");
     })
   };
   return (
