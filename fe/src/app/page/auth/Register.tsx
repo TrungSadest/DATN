@@ -5,20 +5,24 @@ import { AuthService } from "../../service/AuthService";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../store/hook";
 import { RootState } from "../../store/store";
+import Cookies from "universal-cookie";
+import { AuthConstant } from "../../constant/authConstant";
 
 export default function Register() {
   const [model, setModel] = useState(
     new RegisterRequest("", "", "", "", "", "")
   );
   const navigate = useNavigate();
-    const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
+  const cookie = new Cookies();
 
-  useEffect(()=>{
-      console.log(isLogin);
-      if (isLogin && isLogin === true) {
-        navigate('/');
-      }
-    },[isLogin, navigate])
+  useEffect(() => {
+    if (
+      cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined &&
+      cookie.get(AuthConstant.ACCESS_TOKEN) !== ""
+    ) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const changeInput = (data: any) => {
     const value = data.target.value;
@@ -34,7 +38,7 @@ export default function Register() {
       .register(model)
       .then((res) => {
         console.log(res);
-        toast.success('Đăng ký thành công');
+        toast.success("Đăng ký thành công");
       })
       .catch((e) => {
         console.log(e);

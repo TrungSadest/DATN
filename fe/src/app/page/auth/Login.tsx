@@ -13,15 +13,16 @@ import { RootState } from "../../store/store";
 export default function Login() {
   const navigate = useNavigate();
   const cookie = new Cookies();
-  const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
   const [model, setModel] = useState(new LoginRequest("", ""));
 
-  useEffect(()=>{
-    console.log(isLogin);
-    if (isLogin && isLogin === true) {
-      navigate('/');
+  useEffect(() => {
+    if (
+      cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined &&
+      cookie.get(AuthConstant.ACCESS_TOKEN) !== ""
+    ) {
+      navigate("/");
     }
-  },[isLogin, navigate])
+  }, [navigate]);
 
   const changeInput = (data: any) => {
     const value = data.target.value;
@@ -32,21 +33,32 @@ export default function Login() {
     });
   };
   const handleLogin = () => {
-    AuthService.getInstance().login(model).then(res=>{
-      if (res && res.status === HttpStatusCode.Ok && res.data.status === true && res.data.responseData) {
-        const _token = res.data.responseData;
-        toast.success("Đăng nhập thành công");
-        const expires = new Date();
-        expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN)
-        cookie.remove(AuthConstant.ACCESS_TOKEN);
-        cookie.set(AuthConstant.ACCESS_TOKEN, _token, { path: '/', expires: expires })
-        navigate('/');
-      }else{
-        toast.warn("Tài khoản hoặc mật khẩu không đúng")
-      }
-    }).catch(e=>{
-      toast.error("Lỗi hệ thống");
-    })
+    AuthService.getInstance()
+      .login(model)
+      .then((res) => {
+        if (
+          res &&
+          res.status === HttpStatusCode.Ok &&
+          res.data.status === true &&
+          res.data.responseData
+        ) {
+          const _token = res.data.responseData;
+          toast.success("Đăng nhập thành công");
+          const expires = new Date();
+          expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN);
+          cookie.remove(AuthConstant.ACCESS_TOKEN);
+          cookie.set(AuthConstant.ACCESS_TOKEN, _token, {
+            path: "/",
+            expires: expires,
+          });
+          navigate("/");
+        } else {
+          toast.warn("Tài khoản hoặc mật khẩu không đúng");
+        }
+      })
+      .catch((e) => {
+        toast.error("Lỗi hệ thống");
+      });
   };
   return (
     <>

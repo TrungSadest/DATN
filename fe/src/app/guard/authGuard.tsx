@@ -11,7 +11,7 @@ export default function AuthGuard(props: any) {
   const [auth, setAuth] = useState(false);
 
   useEffect(() => {
-    if (cookie.get('access_token') !== undefined && cookie.get('access_token') !== '') {
+    if (cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined && cookie.get(AuthConstant.ACCESS_TOKEN) !== '') {
       setAuth(true)
     } else {
       navigate('/login')
