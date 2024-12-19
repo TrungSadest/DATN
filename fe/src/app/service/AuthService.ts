@@ -1,8 +1,9 @@
 import axios from "axios";
 import { LoginRequest } from "../model/LoginRequest";
 import { RegisterRequest } from "../model/RegisterRequest";
+import { HeadersUtil } from "../util/headersUtil";
 
-export class AuthService {
+export class AuthService {  
   private static _authService: AuthService;
 
   public static getInstance(): AuthService {
@@ -21,4 +22,11 @@ export class AuthService {
     const url = process.env.REACT_APP_AUTH_URL + "/register";
     return axios.post(url, request);
   }
+  public getListCategori(){
+    const url = process.env.REACT_APP_API_URL + "/category/get-all";
+    return axios.get(url,{
+      headers: HeadersUtil.getHeadersAuth(),
+    });
+  }
+  
 }
