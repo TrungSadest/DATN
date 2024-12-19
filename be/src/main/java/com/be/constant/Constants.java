@@ -14,6 +14,7 @@ public class Constants {
     public static final String USERNAME_IS_EXIST = "USERNAME_IS_EXIST";
     public static final String EMAIL_IS_EXIST = "EMAIL_IS_EXIST";
     public static final String REGISTER_FAILED = "REGISTER_FAILED";
+    public static final String CATEGORY_IS_EXIST = "CATEGORY_IS_EXIST";
 
     public static final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
     public static final String REGISTER_SUCCESS = "REGISTER_SUCCESS";

@@ -89,7 +89,7 @@ public class AuthController {
            newUser.setPhoneNumber(registerRequest.getPhoneNumber());
            newUser.setAddress(registerRequest.getAddress());
            newUser.setCreatedDate(new Date());
-           newUser.setIsDel(false);
+           newUser.setDel(false);
            newUser.setRole(new Roles(Constants.ROLE_R003));
            userRepository.save(newUser);
 

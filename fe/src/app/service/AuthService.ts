@@ -2,6 +2,7 @@ import axios from "axios";
 import { LoginRequest } from "../model/LoginRequest";
 import { RegisterRequest } from "../model/RegisterRequest";
 import { HeadersUtil } from "../util/headersUtil";
+import { CategoryModel } from "../model/CategoryModel";
 
 export class AuthService {  
   private static _authService: AuthService;
@@ -22,9 +23,15 @@ export class AuthService {
     const url = process.env.REACT_APP_AUTH_URL + "/register";
     return axios.post(url, request);
   }
-  public getListCategori(){
+  public getListCategory(){
     const url = process.env.REACT_APP_API_URL + "/category/get-all";
     return axios.get(url,{
+      headers: HeadersUtil.getHeadersAuth(),
+    });
+  }
+  public addCategory(request: CategoryModel){
+    const url = process.env.REACT_APP_API_URL + "/category/add";
+    return axios.post(url , request,{
       headers: HeadersUtil.getHeadersAuth(),
     });
   }

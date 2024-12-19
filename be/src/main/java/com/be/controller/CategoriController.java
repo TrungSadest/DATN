@@ -1,14 +1,13 @@
 package com.be.controller;
 
+import com.be.constant.Constants;
 import com.be.entity.Categories;
+import com.be.model.CategoryModel;
 import com.be.model.ResponseData;
 import com.be.repository.CategoriRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,8 +31,39 @@ public class CategoriController {
         }
       return ResponseEntity.ok(responseData)  ;
     }
-//    @PostMapping("/add")
-//    public ResponseEntity<ResponseData> add (){
-//
-//    }
+    @PostMapping("/add")
+    public ResponseEntity<ResponseData> add (@RequestBody CategoryModel categoryModel){
+        ResponseData responseData = new ResponseData();
+        try {
+            if(categoriRepository.existsByCategoryName(categoryModel.getCategoryName())) {
+                responseData.setStatus(false);
+                responseData.setMsgCode(Constants.CATEGORY_IS_EXIST);
+                return ResponseEntity.ok(responseData);
+            }
+            Categories category = new Categories();
+            category.setCategoryName(categoryModel.getCategoryName());
+            category.setDel(true);
+            categoriRepository.save(category);
+            responseData.setStatus(true);
+            responseData.setResponseData(category);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData)  ;
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseData> update (@RequestBody CategoryModel categoryModel){
+        ResponseData responseData = new ResponseData();
+        Categories category = new Categories();
+        category.setCategoryId(categoryModel.getCategoryId());
+        category.setCategoryName(categoryModel.getCategoryName());
+        category.setDel(true);
+        categoriRepository.save(category);
+        responseData.setStatus(true);
+        responseData.setResponseData(category);
+        return ResponseEntity.ok(responseData)  ;
+    }
+
 }

@@ -1,18 +1,9 @@
 package com.be.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "categories")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Categories {
     @Id
     @Column(name = "category_id")
@@ -20,4 +11,38 @@ public class Categories {
 
     @Column(name = "category_name")
     private String categoryName;
+
+    @Column(name = "is_del")
+    private Boolean isDel;
+
+    @PrePersist
+    public void generateId() {
+        if (this.categoryId == null) {
+            this.categoryId = "C-" + System.currentTimeMillis();
+        }
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Boolean getDel() {
+        return isDel;
+    }
+
+    public void setDel(Boolean del) {
+        isDel = del;
+    }
 }
