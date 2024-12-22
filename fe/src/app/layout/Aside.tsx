@@ -19,11 +19,17 @@ export default function Aside() {
       {/* <!-- End Dashboard Nav --> */}
 
       <li className="nav-item">
-        <a className="nav-link collapsed" onClick={()=>{navigate('category')}}>
+        <a className="pointer nav-link collapsed" onClick={()=>{navigate('category')}}>
           <i className="bi bi-menu-button-wide"></i><span>Category</span>
         </a>       
       </li>
       {/* <!-- End Components Nav --> */}
+
+      <li className="nav-item">
+        <a className="pointer nav-link collapsed" onClick={()=>{navigate('product')}}>
+          <i className="bi bi-menu-button-wide"></i><span>Product</span>
+        </a>       
+      </li>
 
       <li className="nav-item">
         <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" >
