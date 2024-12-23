@@ -18,7 +18,7 @@ public class Categories {
     @PrePersist
     public void generateId() {
         if (this.categoryId == null) {
-            this.categoryId = "C-" + System.currentTimeMillis();
+            this.categoryId = "C" + System.currentTimeMillis();
         }
     }
 

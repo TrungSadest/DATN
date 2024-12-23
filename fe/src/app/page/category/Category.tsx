@@ -65,7 +65,7 @@ export default function Category() {
   const update = () => {
     if (validateInput()) {
       AuthService.getInstance()
-        .updateupdateCategory(model)
+        .updateCategory(model)
         .then((res) => {
           if (res.data.status) {
             toast.success("Cập nhật thành công");

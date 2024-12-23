@@ -35,7 +35,7 @@ export class AuthService {
       headers: HeadersUtil.getHeadersAuth(),
     });
   }
-  public updateupdateCategory(request: CategoryModel){
+  public updateCategory(request: CategoryModel){
     const url = process.env.REACT_APP_API_URL + "/category/update";
     return axios.put(url , request,{
       headers: HeadersUtil.getHeadersAuth(),

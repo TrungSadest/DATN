@@ -18,8 +18,7 @@ export const indexRouter: any = {
     { path: "/profile", element: <Profile /> },
     { path: "/category", element: <Categori /> },
     { path: "/product", children: [
-      { path: "", element: <Product /> },
-      { path: "add-product", element: <AddProduct /> },
+      { path: "", element: <Product /> },    
     ] },
   ],
 };
