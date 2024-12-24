@@ -63,7 +63,6 @@ public class ProductController {
     } @PutMapping("/update")
     public ResponseEntity<ResponseData> update (@RequestBody ProductModel productModel){
         ResponseData responseData = new ResponseData();
-
             Products product = new Products();
             product.setProductId(productModel.getProductId());
             product.setProductName(productModel.getProductName());
@@ -79,8 +78,6 @@ public class ProductController {
             productRepository.save(product);
             responseData.setStatus(true);
             responseData.setResponseData(product);
-
-
         return ResponseEntity.ok(responseData)  ;
     }
 

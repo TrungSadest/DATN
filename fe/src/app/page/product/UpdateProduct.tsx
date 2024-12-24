@@ -5,31 +5,16 @@ import { AuthService } from "../../service/AuthService";
 import { BrandModel } from "../../model/BrandModel";
 import { ProductService } from "../../service/ProductService";
 
-export default function AddProduct({
-  onSave,
-}: {
-  onSave: (data: ProductModel) => void;
-}) {
-  const [model, setModel] = useState(
-    new ProductModel(
-      "",
-      "",
-      "",
-      "",
-      0,
-      0,
-      false,
-      false,
-      0,
-      0,
-      0,
-      "",
-      "",
-      "",
-      "",
-      ""
-    )
-  );
+interface ProductProps {
+  product: ProductModel;
+  onUpdateProduct: (product: ProductModel) => void; 
+}
+
+export default function UpdateProduct({
+  product,
+  onUpdateProduct,
+}: ProductProps) {
+  const [model, setModel] = useState<ProductModel>(product);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [brands, setBrands] = useState<BrandModel[]>([]);
 
@@ -53,8 +38,8 @@ export default function AddProduct({
       [name]: value,
     });
   };
-  const saveData = () => {
-    onSave(model);
+  const handleUpdate = () => {
+    onUpdateProduct(model);
   };
   useEffect(() => {
     AuthService.getInstance()
@@ -116,9 +101,11 @@ export default function AddProduct({
                   className="form-select pointer"
                   aria-label="Default select example"
                 >
-                  <option selected>Open this select menu</option>
                   {categories.map((category) => (
-                    <option value={category.categoryId}>
+                    <option
+                      value={category.categoryId}
+                      selected={category.categoryId === model.categoryId}
+                    >
                       {" "}
                       {category.categoryName}
                     </option>
@@ -164,9 +151,14 @@ export default function AddProduct({
                   className="form-select pointer"
                   aria-label="Default select example"
                 >
-                  <option selected>Open this select menu</option>
                   {brands.map((brand) => (
-                    <option value={brand.brandId}> {brand.brandName}</option>
+                    <option
+                      value={brand.brandId}
+                      selected={brand.brandId === model.brandId}
+                    >
+                      {" "}
+                      {brand.brandName}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -175,6 +167,7 @@ export default function AddProduct({
               <div className="col-4">
                 <div className="form-check form-switch mb-2">
                   <input
+                    name="isSpecial"
                     onClick={() => {
                       changeIsSpecial();
                     }}
@@ -188,6 +181,7 @@ export default function AddProduct({
                 </div>
                 <div className="form-check form-switch">
                   <input
+                    name="isDiscount"
                     onClick={() => {
                       changeIsDiscount();
                     }}
@@ -232,7 +226,7 @@ export default function AddProduct({
             </div>
           </div>
           <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={saveData}>
+            <button className="btn btn-primary mt-5" onClick={handleUpdate}>
               Lưu
             </button>
           </div>

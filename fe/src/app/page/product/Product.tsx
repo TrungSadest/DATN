@@ -6,17 +6,38 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { ProductService } from "../../service/ProductService";
 import { ProductModel } from "../../model/ProductModel";
+import UpdateProduct from "./UpdateProduct";
 
-export default function Product() {
+const Product: React.FC = () => {
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [openAdd, setOpenAdd] = useState(false);
-  const [productData, setProductData] = useState(null);
-  const footerContent = (
-    <div>
-      <button className="btn btn-danger me-3">Hủy</button>
-      <button className="btn btn-success">Lưu</button>
-    </div>
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [productData, setProductData] = useState(
+    new ProductModel(
+      "",
+      "",
+      "",
+      "",
+      0,
+      0,
+      false,
+      false,
+      0,
+      0,
+      0,
+      "",
+      "",
+      "",
+      "",
+      ""
+    )
   );
+  // const footerContent = (
+  //   <div>
+  //     <button className="btn btn-danger me-3">Hủy</button>
+  //     <button className="btn btn-success">Lưu</button>
+  //   </div>
+  // );
   useEffect(() => {
     ProductService.getInstance()
       .getListProduct()
@@ -27,34 +48,57 @@ export default function Product() {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, [openAdd]);
   const handleSave = (data: any) => {
     setProductData(data);
     ProductService.getInstance()
-    .addProduct(data)
-    .then((res) => {
-      console.log(res);
-      setOpenAdd(false); 
-    })
-    .catch((e)=>{
-      console.log(e);
-    });
-    
+      .addProduct(data)
+      .then((res) => {
+        console.log(res);
+        setOpenAdd(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     console.log(data);
   };
+  const handleProductUpdate = (data: any) => {
+    console.log("sản phẩm mới từ update Product:", data);
+    setProductData(data);
+  };
+  const handleSelectProduct = (data: any) => {
+    setProductData(data);
+    setOpenUpdate(true);
+  };
+
   return (
     <>
       <Dialog
         header="Thêm sản phẩm"
         visible={openAdd}
         style={{ width: "80vw" }}
-        footer={footerContent}
+        // footer={footerContent}
         onHide={() => {
           if (!openAdd) return;
           setOpenAdd(false);
         }}
       >
         <AddProduct onSave={handleSave} />
+      </Dialog>
+      <Dialog
+        header="Cập nhật sản phẩm"
+        visible={openUpdate}
+        style={{ width: "80vw" }}
+        // footer={footerContent}
+        onHide={() => {
+          if (!openUpdate) return;
+          setOpenUpdate(false);
+        }}
+      >
+        <UpdateProduct
+          product={productData}
+          onUpdateProduct={handleProductUpdate}
+        />
       </Dialog>
 
       <div className="d-flex justify-content-between mb-3">
@@ -77,28 +121,41 @@ export default function Product() {
           tableStyle={{ minWidth: "50rem" }}
         >
           <Column
-            field="productId"
-            header="ID"
+            header="STT"
+            body={(rowData, options) => options.rowIndex + 1}
+          ></Column>
+          <Column
+            field="thumbnail"
+            header="Ảnh"
             style={{ width: "25%" }}
           ></Column>
           <Column
             field="productName"
-            header="Name"
+            header="Tên sản phẩm"
             style={{ width: "25%" }}
           ></Column>
           <Column
             field="categoryId"
-            header="category"
+            header="Danh mục"
+            style={{ width: "25%" }}
+          ></Column>
+          <Column
+            field="brandId"
+            header="Thương hiệu"
             style={{ width: "25%" }}
           ></Column>
           <Column
             header="Action"
             body={(rowData) => (
               <>
-                <Button className="p-button-success" onClick={() => {}}>
+                <Button
+                  className="p-button-success"
+                  onClick={() => {
+                    handleSelectProduct(rowData);
+                  }}
+                >
                   Cập nhật
                 </Button>
-                <Button className="p-button-danger">delete</Button>
               </>
             )}
             style={{ width: "25%" }}
@@ -107,4 +164,5 @@ export default function Product() {
       </div>
     </>
   );
-}
+};
+export default Product;

@@ -1,35 +1,20 @@
-package com.be.entity;
+package com.be.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.Column;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "product_details")
-public class ProductDetails {
-    @Id
-    @Column(name = "product_detail_id")
+public class ProductDetailModel {
     private String productDetailId;
 
-    @Column(name = "product_id")
     private String productId;
 
-    @Column(name = "corlor_id")
     private Integer corlorId;
 
-    @Column(name = "size_id")
     private Integer sizeId;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "image_url")
     private String imageUrl;
 
     public String getProductDetailId() {
