@@ -16,9 +16,9 @@ public class ProductModel {
 
     private Long unitPrice;
 
-    private Boolean isDiscount;
+    private boolean isDiscount;
 
-    private Boolean isSpecial;
+    private boolean isSpecial;
 
     private Integer materialId;
 

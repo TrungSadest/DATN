@@ -1,6 +1,7 @@
 package com.be.controller;
 
 import com.be.entity.CartItems;
+import com.be.entity.Products;
 import com.be.model.CartItemModel;
 import com.be.model.ResponseData;
 import com.be.repository.CartItemRepository;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart-item")
@@ -16,13 +18,28 @@ public class CartItemController {
     @Autowired
     private CartItemRepository cartItemRepository;
 
+    @GetMapping("/get-all")
+    public ResponseEntity<ResponseData> getAll(){
+        ResponseData responseData = new ResponseData();
+        try {
+            List<CartItems> list = cartItemRepository.findAll();
+            responseData.setResponseData(list);
+            responseData.setStatus(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData)  ;
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseData> add (@RequestBody CartItemModel cartItemModel){
         ResponseData responseData = new ResponseData();
         CartItems cartItems = new CartItems();
         CartItems cartItems1 = cartItemRepository.findCartItemsByProductDetailId(cartItemModel.getProductDetailId());
-        cartItems.setUserId(cartItems.getUserId());
-        cartItems.setProductDetailId(cartItems.getProductDetailId());
+        cartItems.setUserId(cartItemModel.getUserId());
+        cartItems.setProductDetailId(cartItemModel.getProductDetailId());
         cartItems.setQuantity(cartItemModel.getQuantity());
         cartItems.setCreatedDate(new Date());
         cartItems.setCreatedBy(cartItemModel.getCreatedBy());
@@ -30,6 +47,7 @@ public class CartItemController {
         cartItems.setUpdatedBy(cartItemModel.getUpdatedBy());
         if(cartItems1 != null){
             cartItems.setQuantity(cartItems1.getQuantity()+cartItems.getQuantity());
+            cartItems.setCartId(cartItems1.getCartId());
         }
         cartItemRepository.save(cartItems);
         responseData.setStatus(true);
