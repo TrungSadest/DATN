@@ -32,12 +32,14 @@ const Product: React.FC = () => {
       ""
     )
   );
+
   // const footerContent = (
   //   <div>
   //     <button className="btn btn-danger me-3">Hủy</button>
   //     <button className="btn btn-success">Lưu</button>
   //   </div>
   // );
+
   useEffect(() => {
     ProductService.getInstance()
       .getListProduct()
@@ -49,7 +51,9 @@ const Product: React.FC = () => {
         console.log(e);
       });
   }, [openAdd]);
+
   const handleSave = (data: any) => {
+    console.log(data);
     setProductData(data);
     ProductService.getInstance()
       .addProduct(data)
@@ -62,10 +66,12 @@ const Product: React.FC = () => {
       });
     console.log(data);
   };
+
   const handleProductUpdate = (data: any) => {
     console.log("sản phẩm mới từ update Product:", data);
     setProductData(data);
   };
+
   const handleSelectProduct = (data: any) => {
     setProductData(data);
     setOpenUpdate(true);

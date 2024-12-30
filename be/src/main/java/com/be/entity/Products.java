@@ -40,9 +40,6 @@ public class Products {
     @Column(name = "is_special")
     private Boolean isSpecial;
 
-    @Column(name = "material_id")
-    private Integer materialId;
-
     @Column(name = "brand_id")
     private Integer brandId;
 
@@ -126,14 +123,6 @@ public class Products {
 
     public void setSpecial(Boolean special) {
         isSpecial = special;
-    }
-
-    public Integer getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
     }
 
     public Integer getBrandId() {
