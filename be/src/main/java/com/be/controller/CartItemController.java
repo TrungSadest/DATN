@@ -5,10 +5,13 @@ import com.be.entity.Products;
 import com.be.model.CartItemModel;
 import com.be.model.ResponseData;
 import com.be.repository.CartItemRepository;
+import com.be.repository.UserRepository;
+import com.be.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +20,10 @@ import java.util.List;
 public class CartItemController {
     @Autowired
     private CartItemRepository cartItemRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommonService commonService;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseData> getAll(){
@@ -34,11 +41,14 @@ public class CartItemController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseData> add (@RequestBody CartItemModel cartItemModel){
+    public ResponseEntity<ResponseData> add (@RequestBody CartItemModel cartItemModel) throws  Exception{
+        String userName = commonService.getUserId();
         ResponseData responseData = new ResponseData();
+        Integer userId = userRepository.findByUsername(userName).getUserId();
+        String productDetailId = cartItemModel.getProductDetailId();
+        CartItems cartItems1 = cartItemRepository.findCartItemsByProductDetailIdAndUserId(productDetailId,userId);
         CartItems cartItems = new CartItems();
-        CartItems cartItems1 = cartItemRepository.findCartItemsByProductDetailId(cartItemModel.getProductDetailId());
-        cartItems.setUserId(cartItemModel.getUserId());
+        cartItems.setUserId(userId);
         cartItems.setProductDetailId(cartItemModel.getProductDetailId());
         cartItems.setQuantity(cartItemModel.getQuantity());
         cartItems.setCreatedDate(new Date());
@@ -62,7 +72,7 @@ public class CartItemController {
         cartItems.setUserId(cartItemModel.getUserId());
         cartItems.setProductDetailId(cartItemModel.getProductDetailId());
         cartItems.setQuantity(cartItemModel.getQuantity());
-        cartItems.setCreatedDate(new Date());
+        cartItems.setCreatedDate(cartItemModel.getCreatedDate());
         cartItems.setCreatedBy(cartItemModel.getCreatedBy());
         cartItems.setUpdatedDate(cartItemModel.getUpdatedDate());
         cartItems.setUpdatedBy(cartItemModel.getUpdatedBy());

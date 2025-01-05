@@ -6,7 +6,7 @@ import java.util.Date;
 public class CartItemModel {
     private String cartId;
 
-    private String userId;
+    private Integer userId;
 
     private String productDetailId;
 
@@ -28,11 +28,11 @@ public class CartItemModel {
         this.cartId = cartId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

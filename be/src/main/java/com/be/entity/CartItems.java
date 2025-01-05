@@ -23,7 +23,7 @@ public class CartItems {
     }
 
     @Column(name = "user_id")
-    private String userId;
+    private Integer userId;
 
     @Column(name = "product_detail_id")
     private String productDetailId;
@@ -51,11 +51,11 @@ public class CartItems {
         this.cartId = cartId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

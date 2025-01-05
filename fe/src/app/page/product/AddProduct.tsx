@@ -32,13 +32,13 @@ export default function AddProduct(props: any) {
   const changeIsDiscount = () => {
     setModel({
       ...model,
-      isDiscount: !model.isDiscount,
+      discount: !model.discount,
     });
   };
   const changeIsSpecial = () => {
     setModel({
       ...model,
-      isSpecial: !model.isSpecial,
+      special: !model.special,
     });
   };
   const changeInput = (data: any) => {
@@ -176,7 +176,7 @@ export default function AddProduct(props: any) {
                     onChange={() => {
                       changeIsSpecial();
                     }}
-                    checked={model.isSpecial ?? false}
+                    checked={model.special ?? false}
                     className="pointer form-check-input"
                     type="checkbox"
                   />
@@ -189,7 +189,7 @@ export default function AddProduct(props: any) {
                     onChange={() => {
                       changeIsDiscount();
                     }}
-                    checked={model.isDiscount ?? false}
+                    checked={model.discount ?? false}
                     className="pointer form-check-input"
                     type="checkbox"
                   />
@@ -197,7 +197,7 @@ export default function AddProduct(props: any) {
                     Khuyến mãi
                   </label>
                 </div>
-                {model && model.isDiscount === true && (
+                {model && model.discount === true && (
                   <div>
                     <input
                       onChange={changeInput}

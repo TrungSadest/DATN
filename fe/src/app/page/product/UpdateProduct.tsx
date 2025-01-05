@@ -18,16 +18,16 @@ export default function UpdateProduct({
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [brands, setBrands] = useState<BrandModel[]>([]);
 
-  const changeIsDiscount = () => {
+  const changediscount = () => {
     setModel({
       ...model,
-      isDiscount: !model.isDiscount,
+      discount: !model.discount,
     });
   };
-  const changeIsSpecial = () => {
+  const changespecial = () => {
     setModel({
       ...model,
-      isSpecial: !model.isSpecial,
+      special: !model.special,
     });
   };
   const changeInput = (data: any) => {
@@ -167,11 +167,11 @@ export default function UpdateProduct({
               <div className="col-4">
                 <div className="form-check form-switch mb-2">
                   <input
-                    name="isSpecial"
+                    name="special"
                     onClick={() => {
-                      changeIsSpecial();
+                      changespecial();
                     }}
-                    checked={model.isSpecial ?? false}
+                    checked={model.special ?? false}
                     className="pointer form-check-input"
                     type="checkbox"
                   />
@@ -181,12 +181,12 @@ export default function UpdateProduct({
                 </div>
                 <div className="form-check form-switch">
                   <input
-                    name="isDiscount"
+                    name="discount"
                     onClick={() => {
-                      changeIsDiscount();
+                      changediscount();
                     }}
                     onChange={() => {}}
-                    checked={model.isDiscount ?? false}
+                    checked={model.discount ?? false}
                     className="pointer form-check-input"
                     type="checkbox"
                   />
@@ -194,7 +194,7 @@ export default function UpdateProduct({
                     Khuyến mãi
                   </label>
                 </div>
-                {model && model.isDiscount === true && (
+                {model && model.discount === true && (
                   <div>
                     <input
                       onChange={changeInput}
