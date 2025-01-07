@@ -7,16 +7,16 @@ export default function Product() {
   const [products, setProducts] = useState<ProductModel[]>([]);
 
   useEffect(() => {
-      ProductService.getInstance()
-        .getListProduct()
-        .then((res) => {
-          setProducts(res.data.responseData);
-          console.log(res);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }, []);
+    ProductService.getInstance()
+      .getListProduct()
+      .then((res) => {
+        setProducts(res.data.responseData);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   return (
     <>
@@ -24,11 +24,11 @@ export default function Product() {
       <body>
         <div className="col-lg-8">
           <div className="row">
-            {products.map((product) =>(
-                <div className="col-md-4">
+            {products.map((product) => (
+              <div className="col-md-4">
                 <div className="product-item ms-4 mb-3">
                   <div className="product-title">
-                    <a href="#">{product.productName}</a>                 
+                    <a href="#">{product.productName}</a>
                   </div>
                   <div className="product-image">
                     <a href="product-detail.html">
@@ -45,7 +45,8 @@ export default function Product() {
                   </div>
                   <div className="product-price">
                     <h3>
-                      {product.unitPrice}<span>VND</span>
+                      {product.unitPrice}
+                      <span>VND</span>
                     </h3>
                     <a className="btn" href="">
                       <i className="pi pi-shopping-cart"></i>Buy Now
@@ -54,9 +55,7 @@ export default function Product() {
                 </div>
               </div>
             ))}
-            
-
-          </div>         
+          </div>
         </div>
       </body>
     </>

@@ -5,6 +5,8 @@ import com.be.model.OrderModel;
 import com.be.model.ResponseData;
 import com.be.repository.OrderItemRepository;
 import com.be.repository.OrderRepository;
+import com.be.repository.UserRepository;
+import com.be.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,10 @@ public class OrderController {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private CommonService commonService;
+
+
     @GetMapping("/get-all")
     public ResponseEntity<ResponseData> getAll(){
         ResponseData responseData = new ResponseData();
@@ -36,14 +42,15 @@ public class OrderController {
         return ResponseEntity.ok(responseData)  ;
     }
     @PostMapping("/add")
-    public ResponseEntity<ResponseData> add (@RequestBody OrderModel orderModel){
+    public ResponseEntity<ResponseData> add (@RequestBody OrderModel orderModel) throws  Exception{
         ResponseData responseData = new ResponseData();
+        String userName = commonService.getUserId();
         Orders orders = new Orders();
         orders.setUserId(orderModel.getUserId());
         orders.setDiscountId(orderModel.getDiscountId());
         orders.setTotalPrice(orderModel.getTotalPrice());
         orders.setStatus("1");
-        orders.setCreatedBy(orderModel.getCreatedBy());
+        orders.setCreatedBy(userName);
         orders.setCreatedDate(new Date());
         orderRepository.save(orders);
         responseData.setStatus(true);
