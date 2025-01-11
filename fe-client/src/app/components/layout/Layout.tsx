@@ -23,7 +23,7 @@ export default function Layout() {
           <Outlet />
         </div>
       </main> */}
-      <Header></Header>
+      {/* <Header></Header> */}
       <Navbar></Navbar>
       <Outlet />
       <Footer></Footer>
