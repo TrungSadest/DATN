@@ -1,0 +1,38 @@
+import axios from 'axios';
+import { ApiUrlUtil } from '../utils/apiUrlUtil';
+import { UserRoleModel } from '../model/UserRoleModel';
+
+export class PublicService {
+  private static _publicService: PublicService;
+  private static _domain = process.env.REACT_APP_API_URL + '/public';
+
+  public static getInstance(): PublicService {
+    if (!PublicService._publicService) {
+      PublicService._publicService = new PublicService();
+    }
+    return PublicService._publicService;
+  }
+
+  public getVerifyCode(email: string) {
+    const param = [{ name: 'email', value: email }]
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/get-verify-code', param);
+    return axios.get(url);
+  }
+
+  public verifyEmail(email: string, verificationKey: string) {
+    const param = [{ name: 'email', value: email }, { name: 'verifyCode', value: verificationKey }];
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/verify-email', param);
+    return axios.get(url);
+  }
+
+  public getCommCode(upCommCd: string) {
+    const param = [{ name: 'upCommCd', value: upCommCd }]
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/get-comm-code', param);
+    return axios.get(url);
+  }
+
+  public insertUserRole(userRole: UserRoleModel) {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/insert-user-role');
+    return axios.post(url, userRole);
+  }
+}
