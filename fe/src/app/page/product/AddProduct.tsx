@@ -103,7 +103,7 @@ export default function AddProduct(props: any) {
           >
           </div>
         </div> */}
-        <div className="col-4 d-flex flex-column align-items-center justify-content-center">
+        <div className="col-lg-4 d-flex flex-column align-items-center justify-content-center">
           <h4>Ảnh sản phẩm</h4>
           <div
             style={{
@@ -148,13 +148,13 @@ export default function AddProduct(props: any) {
             )}
           </div>
         </div>
-        <div className="col-8">
+        <div className="col-lg-8">
           <div>
             <h4>Thông tin sản phẩm</h4>
           </div>
           <div>
             <div className="row mb-3">
-              <div className="col-6">
+              <div className="col-lg-6">
                 <label htmlFor="" className="form-label font-semibold">
                   Tên sản phẩm
                 </label>
@@ -167,7 +167,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-6">
+              <div className="col-lg-6">
                 <label htmlFor="" className="form-label font-semibold">
                   Chọn danh mục
                 </label>
@@ -189,7 +189,7 @@ export default function AddProduct(props: any) {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Đơn giá
                 </label>
@@ -202,7 +202,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Trọng lượng <i>(gam)</i>
                 </label>
@@ -215,7 +215,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Chọn nhãn hiệu
                 </label>
@@ -234,7 +234,7 @@ export default function AddProduct(props: any) {
               </div>
             </div>
             <div className="row">
-              <div className="col-4">
+              <div className="col-lg-4">
                 <div className="form-check form-switch mb-2">
                   <input
                     onChange={() => {
@@ -275,7 +275,7 @@ export default function AddProduct(props: any) {
                   </div>
                 )}
               </div>
-              <div className="col-8">
+              <div className="col-lg-8">
                 <div>
                   <label htmlFor="" className="form-label font-semibold">
                     Mô tả sản phẩm

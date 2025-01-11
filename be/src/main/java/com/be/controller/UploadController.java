@@ -74,7 +74,9 @@ public class UploadController {
                         Path targetLocation = resourcePath.resolve(fileName);
                         Files.copy(item.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-                        savedFilePaths.add(targetLocation.toString());
+//                        savedFilePaths.add(targetLocation.toString());
+                        savedFilePaths.add("http://localhost:8080/upload/" + fileName);
+
                     }
                 }
                 responseData.setResponseData(savedFilePaths);
