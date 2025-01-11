@@ -4,6 +4,7 @@ import { CategoryModel } from "../../model/CategoryModel";
 import { AuthService } from "../../service/AuthService";
 import { BrandModel } from "../../model/BrandModel";
 import { ProductService } from "../../service/ProductService";
+import { generateImageUrl } from "../../util/imageUtil";
 
 interface ProductProps {
   product: ProductModel;
@@ -23,6 +24,7 @@ export default function UpdateProduct({
       ...model,
       discount: !model.discount,
     });
+    console.log(model);
   };
   const changespecial = () => {
     setModel({
@@ -66,10 +68,34 @@ export default function UpdateProduct({
       <div className="row">
         <div className="col-4 d-flex flex-column align-items-center justify-content-center">
           <h4>Ảnh sản phẩm</h4>
-          <div
-            style={{ height: "300px", width: "300px" }}
-            className="bg-primary"
-          ></div>
+                    <div
+                      style={{
+                        height: "300px",
+                        width: "300px",
+                        border: "1px dashed #d3d3d3",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        borderRadius: "8px",
+                        position: "relative",
+                      }}
+                    >
+                      {/* <img
+                        src="http://localhost:8080/api/files/image/c43a7882.jpg"
+                        alt="Ảnh sản phẩm"
+                        style={{ height: "100%", width: "100%", objectFit: "cover" }}
+                      /> */}
+                      {model.thumbnail ? (
+                        <img
+                          src={generateImageUrl(model.thumbnail)}
+                          alt="Ảnh sản phẩm"
+                          style={{ height: "100%", width: "100%", objectFit: "cover" }}
+                        />
+                      ) : (
+                        <span style={{ color: "#d3d3d3" }}>Chưa có ảnh</span>
+                      )}
+                    </div>
         </div>
         <div className="col-8">
           <div>

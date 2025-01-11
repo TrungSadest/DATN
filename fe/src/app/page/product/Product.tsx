@@ -8,6 +8,7 @@ import { ProductService } from "../../service/ProductService";
 import { ProductModel } from "../../model/ProductModel";
 import UpdateProduct from "./UpdateProduct";
 import { generateImageUrl } from "../../util/imageUtil";
+import { toast } from "react-toastify";
 
 const Product: React.FC = () => {
   const [products, setProducts] = useState<ProductModel[]>([]);
@@ -58,7 +59,7 @@ const Product: React.FC = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, [openAdd]);
+  }, [openAdd, openUpdate ]);
 
   const handleSave = (data: any) => {
     console.log(data);
@@ -67,6 +68,7 @@ const Product: React.FC = () => {
       .addProduct(data)
       .then((res) => {
         console.log(res);
+        toast.success("Thêm sản phẩm thành công");
         setOpenAdd(false);
       })
       .catch((e) => {
@@ -78,10 +80,25 @@ const Product: React.FC = () => {
   const handleProductUpdate = (data: any) => {
     console.log("sản phẩm mới từ update Product:", data);
     setProductData(data);
+    ProductService.getInstance()
+    .updateProduct(data)
+    .then((res) => {
+      console.log(res);
+      toast.success("Cập nhật thành công");
+      setOpenUpdate(false);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   };
 
   const handleSelectProduct = (data: any) => {
-    setProductData(data);
+    setProductData({
+      ...data,
+      brandId: data.brands.brandId,
+      categoryId: data.categories.categoryId
+    }
+    );
     setOpenUpdate(true);
   };
 
@@ -155,12 +172,12 @@ const Product: React.FC = () => {
             style={{ width: "25%" }}
           ></Column>
           <Column
-            field="categoryId"
+            field="categories.categoryName"
             header="Danh mục"
             style={{ width: "25%" }}
           ></Column>
           <Column
-            field="brandId"
+            field="brands.brandName"
             header="Thương hiệu"
             style={{ width: "25%" }}
           ></Column>

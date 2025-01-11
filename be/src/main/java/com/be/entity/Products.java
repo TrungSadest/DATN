@@ -2,6 +2,8 @@ package com.be.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,8 +27,9 @@ public class Products {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "category_id")
-    private String categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Categories categories;
 
     @Column(name = "discount_price")
     private Long discountPrice;
@@ -40,8 +43,10 @@ public class Products {
     @Column(name = "is_special")
     private Boolean isSpecial;
 
-    @Column(name = "brand_id")
-    private Integer brandId;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brands brands;
+
 
     @Column(name = "weight")
     private Long weight;
@@ -85,12 +90,12 @@ public class Products {
         this.description = description;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public Categories getCategories() {
+        return categories;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategories(Categories categories) {
+        this.categories = categories;
     }
 
     public Long getDiscountPrice() {
@@ -125,12 +130,12 @@ public class Products {
         isSpecial = special;
     }
 
-    public Integer getBrandId() {
-        return brandId;
+    public Brands getBrands() {
+        return brands;
     }
 
-    public void setBrandId(Integer brandId) {
-        this.brandId = brandId;
+    public void setBrands(Brands brands) {
+        this.brands = brands;
     }
 
     public Long getWeight() {
