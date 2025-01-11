@@ -60,7 +60,8 @@ public class ProductController {
             responseData.setStatus(false);
         }
         return ResponseEntity.ok(responseData)  ;
-    } @PutMapping("/update")
+    }
+    @PutMapping("/update")
     public ResponseEntity<ResponseData> update (@RequestBody ProductModel productModel){
         ResponseData responseData = new ResponseData();
             Products product = new Products();
