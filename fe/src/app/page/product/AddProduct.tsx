@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { UploadService } from "../../service/UploadService";
 import { ProductModel } from "../../model/ProductModel";
 import { CategoryModel } from "../../model/CategoryModel";
-import { AuthService } from "../../service/AuthService";
 import { BrandModel } from "../../model/BrandModel";
+import { AuthService } from "../../service/AuthService";
 import { ProductService } from "../../service/ProductService";
+import { HttpStatusCode } from "axios";
+import { generateImageUrl } from "../../util/imageUtil";
 
 export default function AddProduct(props: any) {
   const [model, setModel] = useState(
@@ -28,7 +33,35 @@ export default function AddProduct(props: any) {
   );
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [brands, setBrands] = useState<BrandModel[]>([]);
+  const [image, setImage] = useState<string | null>(null); // Lưu URL của ảnh
+  const [file, setFile] = useState<File | null>(null); // Lưu file ảnh
 
+  useEffect(() => {
+    if (file != null) {
+      handleUpload();
+    }
+  }, [file]);
+
+  useEffect(() => {
+    setModel({
+      ...model,
+      thumbnail: image ?? "",
+    });
+  }, [image]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const selectedFile = event.target.files[0];
+      // const imageUrl = URL.createObjectURL(selectedFile);
+      // setImage(imageUrl);
+      setFile(selectedFile); // Lưu file ảnh
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null);
+    setFile(null); // Xóa file ảnh
+  };
   const changeIsDiscount = () => {
     setModel({
       ...model,
@@ -74,23 +107,98 @@ export default function AddProduct(props: any) {
       });
   }, []);
 
+  const handleUpload = () => {
+    if (!file) {
+      toast.warn("Vui lòng chọn một ảnh.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    UploadService.getInstance()
+      .uploadImage(formData)
+      .then((res) => {
+        console.log(res.data);
+        if (res && res.status === HttpStatusCode.Ok && res.data.responseData) {
+          if (res.data.responseData.length > 0) {
+            setImage(res.data.responseData[0]);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <div className="row">
-        <div className="col-4 d-flex flex-column align-items-center justify-content-center">
+        {/* <div className="col-4 d-flex flex-column align-items-center justify-content-center">
           <h4>Ảnh sản phẩm</h4>
           <div
             style={{ height: "300px", width: "300px" }}
             className="bg-primary"
-          ></div>
+          >
+          </div>
+        </div> */}
+        <div className="col-lg-4 d-flex flex-column align-items-center justify-content-center">
+          <h4>Ảnh sản phẩm</h4>
+          <div
+            style={{
+              height: "300px",
+              width: "300px",
+              border: "1px dashed #d3d3d3",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              borderRadius: "8px",
+              position: "relative",
+            }}
+          >
+            {/* <img
+              src="http://localhost:8080/api/files/image/c43a7882.jpg"
+              alt="Ảnh sản phẩm"
+              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            /> */}
+            {image ? (
+              <img
+                src={generateImageUrl(image)}
+                alt="Ảnh sản phẩm"
+                style={{ height: "100%", width: "100%", objectFit: "cover" }}
+              />
+            ) : (
+              <span style={{ color: "#d3d3d3" }}>Chưa có ảnh</span>
+            )}
+          </div>
+
+          <div className="mt-2">
+            {!image ? (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "block" }}
+              />
+            ) : (
+              <button
+                onClick={handleRemoveImage}
+                className="btn btn-danger"
+                style={{ marginTop: "10px" }}
+              >
+                Xóa ảnh
+              </button>
+            )}
+          </div>
         </div>
-        <div className="col-8">
+        <div className="col-lg-8">
           <div>
             <h4>Thông tin sản phẩm</h4>
           </div>
           <div>
             <div className="row mb-3">
-              <div className="col-6">
+              <div className="col-lg-6">
                 <label htmlFor="" className="form-label font-semibold">
                   Tên sản phẩm
                 </label>
@@ -103,7 +211,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-6">
+              <div className="col-lg-6">
                 <label htmlFor="" className="form-label font-semibold">
                   Chọn danh mục
                 </label>
@@ -125,7 +233,7 @@ export default function AddProduct(props: any) {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Đơn giá
                 </label>
@@ -138,7 +246,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Trọng lượng <i>(gam)</i>
                 </label>
@@ -151,7 +259,7 @@ export default function AddProduct(props: any) {
                   className="form-control"
                 />
               </div>
-              <div className="col-4">
+              <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
                   Chọn nhãn hiệu
                 </label>
@@ -170,7 +278,7 @@ export default function AddProduct(props: any) {
               </div>
             </div>
             <div className="row">
-              <div className="col-4">
+              <div className="col-lg-4">
                 <div className="form-check form-switch mb-2">
                   <input
                     onChange={() => {
@@ -211,7 +319,7 @@ export default function AddProduct(props: any) {
                   </div>
                 )}
               </div>
-              <div className="col-8">
+              <div className="col-lg-8">
                 <div>
                   <label htmlFor="" className="form-label font-semibold">
                     Mô tả sản phẩm
@@ -228,12 +336,20 @@ export default function AddProduct(props: any) {
               </div>
             </div>
           </div>
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={saveData}>
-              Lưu
-            </button>
-          </div>
         </div>
+      </div>
+      <div className="d-flex justify-content-end">
+        <button
+          onClick={() => {
+            props.onClose();
+          }}
+          className="btn btn-danger me-3"
+        >
+          Hủy
+        </button>
+        <button onClick={saveData} className="btn btn-success">
+          Lưu
+        </button>
       </div>
     </>
   );

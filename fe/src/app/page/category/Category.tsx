@@ -14,6 +14,11 @@ export default function Category() {
   const [model, setModel] = useState(new CategoryModel("", "", true));
   const [error, setError] = useState("");
   useEffect(() => {
+    getListCategory();
+    setError("");
+  }, [visible]);
+
+  const getListCategory = () => {
     AuthService.getInstance()
       .getListCategory()
       .then((res) => {
@@ -22,8 +27,8 @@ export default function Category() {
       .catch((e) => {
         console.log(e);
       });
-    setError("");
-  }, [visible]);
+  };
+
   const changeInput = (data: any) => {
     const value = data.target.value;
     const name = data.target.name;
@@ -70,6 +75,7 @@ export default function Category() {
           if (res.data.status) {
             toast.success("Cập nhật thành công");
             setModel(new CategoryModel("", "", true));
+            getListCategory();
           } else {
             toast.error("Danh mục đã tồn tại");
           }
@@ -92,25 +98,23 @@ export default function Category() {
           setVisible(false);
         }}
       >
-        <form onSubmit={add}>
-          <div className="form-group">
-            <label htmlFor="categoryName">Tên danh mục</label>
-            <input
-              onChange={changeInput}
-              type="text"
-              name="categoryName"
-              className={`form-control ${error ? "is-invalid" : ""} mb-2`}
-              id="categoryName"
-              value={model.categoryName}
-            />
-            {error && <div className="invalid-feedback">{error}</div>}
-          </div>
-          <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Thêm
-            </button>
-          </div>
-        </form>
+        <div className="form-group">
+          <label htmlFor="categoryName">Tên danh mục</label>
+          <input
+            onChange={changeInput}
+            type="text"
+            name="categoryName"
+            className={`form-control ${error ? "is-invalid" : ""} mb-2`}
+            id="categoryName"
+            value={model.categoryName}
+          />
+          {error && <div className="invalid-feedback">{error}</div>}
+        </div>
+        <div className="d-flex justify-content-center">
+          <button onClick={add} className="btn btn-primary">
+            Thêm
+          </button>
+        </div>
       </Dialog>
       <Dialog
         header="Cập nhật"
@@ -121,25 +125,23 @@ export default function Category() {
           setVisible1(false);
         }}
       >
-        <form onSubmit={update}>
-          <div className="form-group">
-            <label htmlFor="categoryName">Tên danh mục</label>
-            <input
-              onChange={changeInput}
-              type="text"
-              name="categoryName"
-              className={`form-control ${error ? "is-invalid" : ""} mb-2`}
-              id="categoryName"
-              value={model.categoryName}
-            />
-            {error && <div className="invalid-feedback">{error}</div>}
-          </div>
-          <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Cập nhật
-            </button>
-          </div>
-        </form>
+        <div className="form-group">
+          <label htmlFor="categoryName">Tên danh mục</label>
+          <input
+            onChange={changeInput}
+            type="text"
+            name="categoryName"
+            className={`form-control ${error ? "is-invalid" : ""} mb-2`}
+            id="categoryName"
+            value={model.categoryName}
+          />
+          {error && <div className="invalid-feedback">{error}</div>}
+        </div>
+        <div className="d-flex justify-content-center">
+          <button onClick={update} className="btn btn-primary">
+            Cập nhật
+          </button>
+        </div>
       </Dialog>
       <div className="d-flex justify-content-between mb-3">
         <h2>Danh Mục</h2>
@@ -160,7 +162,11 @@ export default function Category() {
           rows={5}
           tableStyle={{ minWidth: "50rem" }}
         >
-          <Column header="STT" body={(rowData, options) => options.rowIndex + 1} style={{ width: "5%" }}></Column>
+          <Column
+            header="STT"
+            body={(rowData, options) => options.rowIndex + 1}
+            style={{ width: "5%" }}
+          ></Column>
           <Column
             field="categoryName"
             header="Name"
