@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from 'react'
+import logo from '../../../assets/img/LO-BDS.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
+import { getUserInfo } from '../../reducers/userSlice';
+import Cookies from 'universal-cookie';
+import { AuthConstant } from '../../constants/authConstant';
+
+export default function Navbar() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const cookie = new Cookies();
+    const dispatch = useAppDispatch();
+    const [openMng, setOpenMng] = useState(false);
+    const [openPersonal, setOpenPersonal] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+    const url = location.pathname;
+    const arrUrl = url.split("/");
+    const [isCollapseOpen, setCollapseOpen] = useState(false);
+
+    useEffect(() => {
+        dispatch(getUserInfo());
+        if (cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined && cookie.get(AuthConstant.ACCESS_TOKEN) !== '') {
+            setIsLogin(true);
+        } else {
+            setIsLogin(false);
+        }
+    }, [navigate])
+
+    const checkActive = (url: string) => {
+        for (let i = 1; i <= arrUrl.length; i++) {
+            if (arrUrl[i] == url) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const handleLogout = () => {
+        cookie.remove(AuthConstant.ACCESS_TOKEN);
+        navigate('/');
+        window.location.reload();
+    }
+
+    const handleMenuClick = (path: any) => {
+        setOpenMng(false);
+        setOpenPersonal(false);
+        navigate(path); // Điều hướng đến path
+        setCollapseOpen(false); // Đóng collapse
+    };
+
+    const toggleMng = () => {
+        setOpenMng(!openMng);
+        setOpenPersonal(false);
+    }
+
+    const togglePersonal = () => {
+        setOpenPersonal(!openPersonal);
+        setOpenMng(false);
+    }
+
+    return (
+        <>
+            <nav className="z-1 navbar navbar-expand-lg bg-white navbar-light py-lg-0 px-lg-0 text-center shadow-sm">
+                <div className='container'>
+                    <a onClick={() => { handleMenuClick('/dashboard') }} className="pointer navbar-brand ms-lg-5">
+                        <img style={{ width: '165px' }} src={logo} alt="" />
+                    </a>
+                    {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span className="navbar-toggler-icon"></span>
+                    </button> */}
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded={isCollapseOpen} aria-label="Toggle navigation" onClick={() => setCollapseOpen(!isCollapseOpen)}>
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className={`collapse navbar-collapse ${isCollapseOpen ? 'show' : ''}`} id="navbarCollapse">
+                        <div className="navbar-nav ms-auto py-0">
+                            <a onClick={() => { handleMenuClick('/dashboard') }} className={`pointer nav-item nav-link ${checkActive('dashboard') ? 'active' : ''}`}>Trang chủ</a>
+                            <a onClick={() => { handleMenuClick('/buy') }} className={`pointer nav-item nav-link ${checkActive('buy') ? 'active' : ''}`}>Mua</a>
+                            <a onClick={() => { handleMenuClick('/sell') }} className={`pointer nav-item nav-link ${checkActive('sell') ? 'active' : ''}`}>Bán</a>
+                            <a onClick={() => { handleMenuClick('/about') }} className={`pointer nav-item nav-link ${checkActive('about') ? 'active' : ''}`}>Thông tin</a>
+                            {
+                                !isLogin &&
+                                <a onClick={() => { handleMenuClick('/auth/login') }} className={`pointer nav-item nav-link ${checkActive('auth') ? 'active' : ''}`}>Đăng nhập</a>
+                            }
+                            {
+                                isLogin && isLogin === true &&
+                                <>
+                                    <div className="nav-item dropdown">
+                                        <a onClick={toggleMng} className={`pointer nav-link dropdown-toggle ${checkActive('mng') ? 'active' : ''}`}>Quản lý</a>
+                                        {
+                                            openMng && (
+                                                <div className="dropdown-menu w-50 mx-auto text-center show">
+                                                    <a onClick={() => { handleMenuClick('/mng/account') }} className="pointer dropdown-item">Tài khoản</a>
+                                                    <a onClick={() => { handleMenuClick('/mng/license-mng') }} className="pointer dropdown-item">Giấy phép</a>
+                                                    <a onClick={() => { handleMenuClick('/mng/license-mng') }} className="pointer dropdown-item">Thống kê</a>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="nav-item dropdown">
+                                        <a onClick={togglePersonal} className={`pointer nav-link dropdown-toggle ${checkActive('auth') ? 'active' : ''}`}>Cá nhân</a>
+                                        {
+                                            openPersonal && (
+                                                <div className="dropdown-menu w-50 mx-auto text-center show">
+                                                    <a onClick={() => { handleMenuClick('/auth/license-mng') }} className="pointer dropdown-item">Thông tin cá nhân</a>
+                                                    <a onClick={() => { handleMenuClick('/auth/license-mng') }} className="pointer dropdown-item">Lịch sử mua hàng</a>
+                                                    <a onClick={handleLogout} className="pointer dropdown-item">Đăng xuất</a>
+                                                </div>
+                                            )}
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </nav >
+        </>
+    )
+}

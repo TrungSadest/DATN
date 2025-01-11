@@ -1,0 +1,40 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import { AuthConstant } from '../constants/authConstant';
+
+export default function AuthGuard(props: any) {
+  const cookie = new Cookies();
+  const navigate = useNavigate();
+
+  const [auth, setAuth] = useState(false);
+
+  // const [accessToken, setAccessToken] = useSearchParams()
+  // const _token = accessToken.get(AuthConstant.ACCESS_TOKEN)
+
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const _token = params.get(AuthConstant.ACCESS_TOKEN);
+
+  if (_token) {
+    const expires = new Date();
+    expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN)
+    cookie.remove(AuthConstant.ACCESS_TOKEN)
+    cookie.remove(AuthConstant.PUBLIC_KEY)
+    cookie.set(AuthConstant.ACCESS_TOKEN, _token, { path: '/', expires: expires })
+    window.location.href = "/"
+  }
+
+  useEffect(() => {
+    if (cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined && cookie.get(AuthConstant.ACCESS_TOKEN) !== '') {
+      setAuth(true)
+    } else {
+      navigate('/auth/login')
+      // let domain = window.location.origin;
+      // window.location.href = process.env.REACT_APP_AUTH_URL + "/login?redirect_uri=" + domain || ""
+    }
+  }, [navigate]);
+
+  return auth && props.children;
+}
