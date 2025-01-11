@@ -1,46 +1,23 @@
-package com.be.entity;
+package com.be.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.Column;
 import java.util.Date;
 
-@Entity
-@Table(name = "cart_items")
-public class CartItems {
-    @Id
-    @Column(name = "cart_id")
+public class CartItemModel {
     private String cartId;
 
-    @PrePersist
-    public void generateId() {
-        if (this.cartId == null) {
-            this.cartId = "Cart" + System.currentTimeMillis();
-        }
-    }
-
-    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "product_detail_id")
     private String productDetailId;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "updated_date")
     private Date updatedDate;
 
-    @Column(name = "updated_by")
     private String updatedBy;
 
     public String getCartId() {

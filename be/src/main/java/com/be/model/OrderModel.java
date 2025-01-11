@@ -1,44 +1,24 @@
-package com.be.entity;
+package com.be.model;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "orders")
-public class Orders {
-    @Id
-    @Column(name = "order_id")
+public class OrderModel {
     private String orderId;
 
-    @PrePersist
-    public void generateId() {
-        if (this.orderId == null) {
-            this.orderId = "OD" + System.currentTimeMillis();
-        }
-    }
-
-    @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "discount_id")
     private String discountId;
 
-    @Column(name = "total_price")
     private Long totalPrice;
 
-    @Column(name = "status")
     private String status;
 
-    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "updated_date")
     private Date updatedDate;
 
-    @Column(name = "updated_by")
     private String updatedBy;
 
     public String getOrderId() {

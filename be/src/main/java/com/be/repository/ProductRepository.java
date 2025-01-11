@@ -3,6 +3,10 @@ package com.be.repository;
 import com.be.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ProductRepository extends JpaRepository<Products, String> {
+    Boolean existsByProductName(String name);
+    List<Products> findProductsByProductName(String name);
 
 }

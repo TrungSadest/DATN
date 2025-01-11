@@ -1,43 +1,30 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { UploadService } from "../../service/UploadService";
 import { ProductModel } from "../../model/ProductModel";
 import { CategoryModel } from "../../model/CategoryModel";
-import { BrandModel } from "../../model/BrandModel";
 import { AuthService } from "../../service/AuthService";
+import { BrandModel } from "../../model/BrandModel";
 import { ProductService } from "../../service/ProductService";
 
-export default function AddProduct(props: any) {
-  const [product, setProduct] = useState({
-    isDiscount: false,
-  });
-  const [model, setModel] = useState(new ProductModel("","","","",0,0,false,false,0,0,0,"","","","",""));
+interface ProductProps {
+  product: ProductModel;
+  onUpdateProduct: (product: ProductModel) => void; 
+}
+
+export default function UpdateProduct({
+  product,
+  onUpdateProduct,
+}: ProductProps) {
+  const [model, setModel] = useState<ProductModel>(product);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [brands, setBrands] = useState<BrandModel[]>([]);
-  const [image, setImage] = useState<string | null>(null); // Lưu URL của ảnh
-  const [file, setFile] = useState<File | null>(null); // Lưu file ảnh
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const selectedFile = event.target.files[0];
-      const imageUrl = URL.createObjectURL(selectedFile); // Tạo URL để hiển thị ảnh
-      setImage(imageUrl);
-      setFile(selectedFile); // Lưu file ảnh
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setImage(null);
-    setFile(null); // Xóa file ảnh
-  };
-  const changeIsDiscount = () => {
+  const changediscount = () => {
     setModel({
       ...model,
       discount: !model.discount,
     });
   };
-  const changeIsSpecial = () => {
+  const changespecial = () => {
     setModel({
       ...model,
       special: !model.special,
@@ -51,8 +38,8 @@ export default function AddProduct(props: any) {
       [name]: value,
     });
   };
-  const saveData = () => {
-    props.onSave(model);
+  const handleUpdate = () => {
+    onUpdateProduct(model);
   };
   useEffect(() => {
     AuthService.getInstance()
@@ -63,90 +50,26 @@ export default function AddProduct(props: any) {
       .catch((e) => {
         console.log(e);
       });
-
+  }, []);
+  useEffect(() => {
     ProductService.getInstance()
       .getListBrand()
       .then((res) => {
-        console.log("brand");
-        console.log(res);
         setBrands(res.data.responseData);
       })
       .catch((e) => {
         console.log(e);
       });
   }, []);
-
-  const handleUpload = ()=>{
-    if (!file) {
-      toast.warn("Vui lòng chọn một ảnh.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    UploadService.getInstance().uploadImage(formData).then(res=>{
-      console.log(res);
-    }).catch(e=>{
-      console.log(e);
-    })
-  }
-
   return (
     <>
       <div className="row">
-        {/* <div className="col-4 d-flex flex-column align-items-center justify-content-center">
+        <div className="col-4 d-flex flex-column align-items-center justify-content-center">
           <h4>Ảnh sản phẩm</h4>
           <div
             style={{ height: "300px", width: "300px" }}
             className="bg-primary"
-          >
-          </div>
-        </div> */}
-        <div className="col-4 d-flex flex-column align-items-center justify-content-center">
-          <h4>Ảnh sản phẩm</h4>
-          <div
-            style={{
-              height: "300px",
-              width: "300px",
-              border: "1px dashed #d3d3d3",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              borderRadius: "8px",
-              position: "relative",
-            }}
-          >
-            {image ? (
-              <img
-                src={image}
-                alt="Ảnh sản phẩm"
-                style={{ height: "100%", width: "100%", objectFit: "cover" }}
-              />
-            ) : (
-              <span style={{ color: "#d3d3d3" }}>Chưa có ảnh</span>
-            )}
-          </div>
-
-          <div className="mt-2">
-            {!image ? (
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: "block" }}
-              />
-            ) : (
-              <button
-                onClick={handleRemoveImage}
-                className="btn btn-danger"
-                style={{ marginTop: "10px" }}
-              >
-                Xóa ảnh
-              </button>
-            )}
-          </div>
+          ></div>
         </div>
         <div className="col-8">
           <div>
@@ -178,9 +101,11 @@ export default function AddProduct(props: any) {
                   className="form-select pointer"
                   aria-label="Default select example"
                 >
-                  <option>Open this select menu</option>
                   {categories.map((category) => (
-                    <option value={category.categoryId}>
+                    <option
+                      value={category.categoryId}
+                      selected={category.categoryId === model.categoryId}
+                    >
                       {" "}
                       {category.categoryName}
                     </option>
@@ -204,7 +129,7 @@ export default function AddProduct(props: any) {
               </div>
               <div className="col-4">
                 <label htmlFor="" className="form-label font-semibold">
-                  Trọng lượng <i>(gam)</i>
+                  Trọng lượng
                 </label>
                 <input
                   onChange={changeInput}
@@ -226,9 +151,14 @@ export default function AddProduct(props: any) {
                   className="form-select pointer"
                   aria-label="Default select example"
                 >
-                  <option>Open this select menu</option>
                   {brands.map((brand) => (
-                    <option value={brand.brandId}> {brand.brandName}</option>
+                    <option
+                      value={brand.brandId}
+                      selected={brand.brandId === model.brandId}
+                    >
+                      {" "}
+                      {brand.brandName}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -237,8 +167,9 @@ export default function AddProduct(props: any) {
               <div className="col-4">
                 <div className="form-check form-switch mb-2">
                   <input
-                    onChange={() => {
-                      changeIsSpecial();
+                    name="special"
+                    onClick={() => {
+                      changespecial();
                     }}
                     checked={model.special ?? false}
                     className="pointer form-check-input"
@@ -250,9 +181,11 @@ export default function AddProduct(props: any) {
                 </div>
                 <div className="form-check form-switch">
                   <input
-                    onChange={() => {
-                      changeIsDiscount();
+                    name="discount"
+                    onClick={() => {
+                      changediscount();
                     }}
+                    onChange={() => {}}
                     checked={model.discount ?? false}
                     className="pointer form-check-input"
                     type="checkbox"
@@ -293,16 +226,12 @@ export default function AddProduct(props: any) {
             </div>
           </div>
           <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={saveData}>
+            <button className="btn btn-primary mt-5" onClick={handleUpdate}>
               Lưu
             </button>
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-end">
-        <button onClick={()=>{props.onClose()}} className="btn btn-danger me-3">Hủy</button>
-        <button onClick={handleUpload} className="btn btn-success">Lưu</button>
-    </div>
     </>
   );
 }

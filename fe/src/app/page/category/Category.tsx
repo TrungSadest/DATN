@@ -65,7 +65,7 @@ export default function Category() {
   const update = () => {
     if (validateInput()) {
       AuthService.getInstance()
-        .updateupdateCategory(model)
+        .updateCategory(model)
         .then((res) => {
           if (res.data.status) {
             toast.success("Cập nhật thành công");
@@ -160,11 +160,7 @@ export default function Category() {
           rows={5}
           tableStyle={{ minWidth: "50rem" }}
         >
-          <Column
-            field="categoryId"
-            header="ID"
-            style={{ width: "25%" }}
-          ></Column>
+          <Column header="STT" body={(rowData, options) => options.rowIndex + 1} style={{ width: "5%" }}></Column>
           <Column
             field="categoryName"
             header="Name"
@@ -182,7 +178,6 @@ export default function Category() {
                 >
                   Cập nhật
                 </Button>
-                <Button className="p-button-danger">delete</Button>
               </>
             )}
             style={{ width: "25%" }}
