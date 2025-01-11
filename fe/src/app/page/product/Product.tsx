@@ -5,12 +5,13 @@ import { Button } from "primereact/button";
 
 export default function Product() {
   const [openAdd, setOpenAdd] = useState(false);
-  const footerContent = (
-    <div>
-        <button className="btn btn-danger me-3">Hủy</button>
-        <button className="btn btn-success">Lưu</button>
-    </div>
-);
+
+const handleClose = (data?: any)=>{
+  setOpenAdd(false);
+  if (data) {
+    // Thực hiện việc tiếp
+  }
+}
 
   return (
     <>
@@ -18,14 +19,13 @@ export default function Product() {
         header="Thêm sản phẩm"
         visible={openAdd}
         style={{ width: "80vw" }}
-        footer={footerContent}
         onHide={() => {
           if (!openAdd) return;
           setOpenAdd(false);
         }}
       >
 
-        <AddProduct/>
+        <AddProduct onClose={handleClose} />
 
       </Dialog>
 
