@@ -95,7 +95,7 @@ const handleClose = (data?: any)=>{
           setOpenAdd(false);
         }}
       >
-        <AddProduct onSave={handleSave} />
+        <AddProduct onSave={handleSave} onClose={handleClose} />
       </Dialog>
       <Dialog
         header="Cập nhật sản phẩm"

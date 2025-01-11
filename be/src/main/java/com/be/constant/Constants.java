@@ -1,7 +1,7 @@
 package com.be.constant;
 
 public class Constants {
-    public static final String[] WHITE_LIST = { "/api/public/**", "/api/comm/**", "/api/auth/**", "/api/**", "/auth/**" };
+    public static final String[] WHITE_LIST = { "/api/public/**", "/api/comm/**", "/api/auth/**", "/api/**", "/auth/**", "/api/files/**" };
 //    public static final String[] WHITE_ROLE_R000 = { "/api/category/**" };
     public static final String[] WHITE_ROLE_R001 = { "/api/category/**" };
 

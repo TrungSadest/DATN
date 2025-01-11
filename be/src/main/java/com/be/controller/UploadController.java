@@ -1,13 +1,16 @@
 package com.be.controller;
 
 import com.be.model.ResponseData;
+import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,7 +78,7 @@ public class UploadController {
                         Files.copy(item.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
 //                        savedFilePaths.add(targetLocation.toString());
-                        savedFilePaths.add("http://localhost:8080/upload/" + fileName);
+                        savedFilePaths.add(fileName);
 
                     }
                 }
@@ -93,6 +96,26 @@ public class UploadController {
     private String getFileExtension(String fileName) {
         int lastIndexOfDot = fileName.lastIndexOf('.');
         return (lastIndexOfDot != -1) ? fileName.substring(lastIndexOfDot) : "";
+    }
+
+    private final Path fileStorageLocation = Paths.get("upload").toAbsolutePath().normalize();
+
+    // Endpoint để truy xuất file ảnh
+    @GetMapping("/image/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        try {
+            Path filePath = fileStorageLocation.resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (MalformedURLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 }

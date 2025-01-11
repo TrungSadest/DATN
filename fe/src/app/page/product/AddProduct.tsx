@@ -7,22 +7,53 @@ import { CategoryModel } from "../../model/CategoryModel";
 import { BrandModel } from "../../model/BrandModel";
 import { AuthService } from "../../service/AuthService";
 import { ProductService } from "../../service/ProductService";
+import { HttpStatusCode } from "axios";
+import { generateImageUrl } from "../../util/imageUtil";
 
 export default function AddProduct(props: any) {
-  const [product, setProduct] = useState({
-    isDiscount: false,
-  });
-  const [model, setModel] = useState(new ProductModel("","","","",0,0,false,false,0,0,0,"","","","",""));
+  const [model, setModel] = useState(
+    new ProductModel(
+      "",
+      "",
+      "",
+      "",
+      0,
+      0,
+      false,
+      false,
+      0,
+      0,
+      0,
+      "",
+      "",
+      "",
+      "",
+      ""
+    )
+  );
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [brands, setBrands] = useState<BrandModel[]>([]);
   const [image, setImage] = useState<string | null>(null); // Lưu URL của ảnh
   const [file, setFile] = useState<File | null>(null); // Lưu file ảnh
 
+  useEffect(() => {
+    if (file != null) {
+      handleUpload();
+    }
+  }, [file]);
+
+  useEffect(() => {
+    setModel({
+      ...model,
+      thumbnail: image ?? "",
+    });
+  }, [image]);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      const imageUrl = URL.createObjectURL(selectedFile); // Tạo URL để hiển thị ảnh
-      setImage(imageUrl);
+      // const imageUrl = URL.createObjectURL(selectedFile);
+      // setImage(imageUrl);
       setFile(selectedFile); // Lưu file ảnh
     }
   };
@@ -76,7 +107,7 @@ export default function AddProduct(props: any) {
       });
   }, []);
 
-  const handleUpload = ()=>{
+  const handleUpload = () => {
     if (!file) {
       toast.warn("Vui lòng chọn một ảnh.");
       return;
@@ -85,12 +116,20 @@ export default function AddProduct(props: any) {
     const formData = new FormData();
     formData.append("file", file);
 
-    UploadService.getInstance().uploadImage(formData).then(res=>{
-      console.log(res);
-    }).catch(e=>{
-      console.log(e);
-    })
-  }
+    UploadService.getInstance()
+      .uploadImage(formData)
+      .then((res) => {
+        console.log(res.data);
+        if (res && res.status === HttpStatusCode.Ok && res.data.responseData) {
+          if (res.data.responseData.length > 0) {
+            setImage(res.data.responseData[0]);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -118,9 +157,14 @@ export default function AddProduct(props: any) {
               position: "relative",
             }}
           >
+            {/* <img
+              src="http://localhost:8080/api/files/image/c43a7882.jpg"
+              alt="Ảnh sản phẩm"
+              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            /> */}
             {image ? (
               <img
-                src={image}
+                src={generateImageUrl(image)}
                 alt="Ảnh sản phẩm"
                 style={{ height: "100%", width: "100%", objectFit: "cover" }}
               />
@@ -292,17 +336,21 @@ export default function AddProduct(props: any) {
               </div>
             </div>
           </div>
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={saveData}>
-              Lưu
-            </button>
-          </div>
         </div>
       </div>
       <div className="d-flex justify-content-end">
-        <button onClick={()=>{props.onClose()}} className="btn btn-danger me-3">Hủy</button>
-        <button onClick={handleUpload} className="btn btn-success">Lưu</button>
-    </div>
+        <button
+          onClick={() => {
+            props.onClose();
+          }}
+          className="btn btn-danger me-3"
+        >
+          Hủy
+        </button>
+        <button onClick={saveData} className="btn btn-success">
+          Lưu
+        </button>
+      </div>
     </>
   );
 }
