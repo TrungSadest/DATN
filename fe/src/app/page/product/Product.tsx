@@ -7,17 +7,18 @@ import { Column } from "primereact/column";
 import { ProductService } from "../../service/ProductService";
 import { ProductModel } from "../../model/ProductModel";
 import UpdateProduct from "./UpdateProduct";
+import { generateImageUrl } from "../../util/imageUtil";
 
 const Product: React.FC = () => {
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [openAdd, setOpenAdd] = useState(false);
 
-const handleClose = (data?: any)=>{
-  setOpenAdd(false);
-  if (data) {
-    // Thực hiện việc tiếp
-  }
-}
+  const handleClose = (data?: any) => {
+    setOpenAdd(false);
+    if (data) {
+      // Thực hiện việc tiếp
+    }
+  };
   const [openUpdate, setOpenUpdate] = useState(false);
   const [productData, setProductData] = useState(
     new ProductModel(
@@ -140,6 +141,13 @@ const handleClose = (data?: any)=>{
             field="thumbnail"
             header="Ảnh"
             style={{ width: "25%" }}
+            body={(rowData, options) => (
+              <img
+                style={{ width: "70px" }}
+                src={generateImageUrl(rowData.thumbnail ?? "")}
+                alt=""
+              />
+            )}
           ></Column>
           <Column
             field="productName"
@@ -166,7 +174,7 @@ const handleClose = (data?: any)=>{
                     handleSelectProduct(rowData);
                   }}
                 >
-                  Cập nhật
+                  <i className="bi bi-pencil-square"></i>
                 </Button>
               </>
             )}
