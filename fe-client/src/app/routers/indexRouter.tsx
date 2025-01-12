@@ -13,6 +13,8 @@ import AgentAccount from '../pages/seller/Account';
 import LicenseHistory from '../pages/license/LicenseHistory';
 import BuyComponent from '../pages/buy/BuyComponent';
 import SellComponent from '../pages/sell/SellComponent';
+import Product from '../pages/product/Product';
+import Cart from '../pages/cart/Cart';
 
 export const indexRouter: any = {
   path: '/',
@@ -29,30 +31,14 @@ export const indexRouter: any = {
     },
     { path: '/about', element: <About /> },
     {
-      path: '/auth', children: [
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
-        { path: 'verify-account/:verifyKey', element: <VerifyAccount /> },
-        { path: 'license-mng', element: <AuthGuard><LicenseHistory /></AuthGuard> },
+      path: '/product', children: [
+        { path: '', element: <Product /> }
       ]
     },
     {
-      path: '/mng', children: [
-        { path: 'account', element: <AuthGuard><AgentAccount /></AuthGuard> },
-        { path: 'license-mng', element: <AuthGuard><LicenseMng /></AuthGuard> },
+      path: '/cart', children: [
+        { path: '', element: <Cart /> }
       ]
     },
-    //BĐS
-    {
-      path: '/buy', children: [
-        { path: '', element: <BuyComponent /> }
-      ]
-    },
-    {
-      path: '/sell', children: [
-        { path: '', element: <SellComponent /> }
-      ]
-    }
-    // { path: '/discount-policy', element: <DiscountPolicy /> },
   ],
 };

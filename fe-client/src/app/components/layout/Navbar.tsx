@@ -11,7 +11,7 @@ export default function Navbar() {
     const cookie = new Cookies();
     const dispatch = useAppDispatch();
     const [openMng, setOpenMng] = useState(false);
-    const [openPersonal, setOpenPersonal] = useState(false);
+    const [openCart, setOpenCart] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const url = location.pathname;
     const arrUrl = url.split("/");
@@ -43,24 +43,24 @@ export default function Navbar() {
 
     const handleMenuClick = (path: any) => {
         setOpenMng(false);
-        setOpenPersonal(false);
+        setOpenCart(false);
         navigate(path); // Điều hướng đến path
         setCollapseOpen(false); // Đóng collapse
     };
 
     const toggleMng = () => {
         setOpenMng(!openMng);
-        setOpenPersonal(false);
+        setOpenCart(false);
     }
 
-    const togglePersonal = () => {
-        setOpenPersonal(!openPersonal);
+    const toggleCart = () => {
+        setOpenCart(!openCart);
         setOpenMng(false);
     }
 
     return (
         <>
-            <nav className="z-1 navbar navbar-expand-lg bg-white navbar-light py-lg-0 px-lg-0 text-center shadow-sm">
+            <nav className="z-999 navbar navbar-expand-lg bg-white navbar-light py-lg-0 px-lg-0 text-center shadow-sm">
                 <div className='container'>
                     <div className='d-flex'>
                         <a onClick={() => { handleMenuClick('/dashboard') }} className="pointer d-flex align-content-center navbar-brand ms-lg-5">
@@ -77,8 +77,7 @@ export default function Navbar() {
                         <div className={`collapse navbar-collapse ${isCollapseOpen ? 'show' : ''}`} id="navbarCollapse">
                             <div className="navbar-nav ms-auto py-0">
                                 <a onClick={() => { handleMenuClick('/dashboard') }} className={`pointer nav-item nav-link ${checkActive('dashboard') ? 'active' : ''}`}>Trang chủ</a>
-                                <a className='pointer nav-item nav-link'>Sản phẩm</a>
-                                <a className='pointer nav-item nav-link'></a>
+                                <a onClick={() => { handleMenuClick('/product') }} className={`pointer nav-item nav-link ${checkActive('product') ? 'active' : ''}`}>Sản phẩm</a>
                                 <a className='pointer nav-item nav-link'>Thông tin</a>
                                 <div className="nav-item dropdown">
                                     <a onClick={toggleMng} className={`pointer nav-link dropdown-toggle ${checkActive('mng') ? 'active' : ''}`}>Quản lý</a>
@@ -95,9 +94,13 @@ export default function Navbar() {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <button></button>
+                    <div className="nav-item">
+                        <a onClick={() => { handleMenuClick('/cart') }} className="cart-icon pointer">
+                            <i className="bi bi-cart"></i>
+                            <span className="cart-count">3</span>
+                        </a>
                     </div>
+
                 </div>
             </nav >
         </>

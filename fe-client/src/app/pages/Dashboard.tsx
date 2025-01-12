@@ -50,66 +50,12 @@ export default function Dashboard() {
         </div>
       </div>
       {/* <!-- Feature End-->       */}
-
-      {/* <!-- Category Start--> */}
-      <div className="category">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-3">
-              <div className="category-item ch-400">
-                <img src="/assets/img/category-3.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="category-item ch-250">
-                <img src="/assets/img/category-4.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-              <div className="category-item ch-150">
-                <img src="/assets/img/category-5.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="category-item ch-150">
-                <img src="/assets/img/category-6.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-              <div className="category-item ch-250">
-                <img src="/assets/img/category-7.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="category-item ch-400">
-                <img src="/assets/img/category-8.jpg" />
-                <a className="category-name" href="">
-                  <p>Some text goes here that describes the image</p>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <!-- Category End-->        */}
-
       {/* <!-- Call to Action Start --> */}
       <div className="call-to-action">
         <div className="container-fluid">
           <div className="row align-items-center">
             <div className="col-md-6">
-              <h1>call us for any queries</h1>
+              <h1>Call us for any queries</h1>
             </div>
             <div className="col-md-6">
               <a href="tel:0123456789">+012-345-6789</a>
@@ -126,17 +72,10 @@ export default function Dashboard() {
             <h1>Featured Product</h1>
           </div>
           <div className="row align-items-center product-slider product-slider-4">
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -154,17 +93,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -182,17 +114,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -210,17 +135,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -238,17 +156,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -296,17 +207,10 @@ export default function Dashboard() {
             <h1>Recent Product</h1>
           </div>
           <div className="row align-items-center product-slider product-slider-4">
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -324,17 +228,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -352,17 +249,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -380,17 +270,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -408,17 +291,10 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-3 mb-3">
               <div className="product-item">
                 <div className="product-title">
                   <a href="#">Product Name</a>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
                 </div>
                 <div className="product-image">
                   <a href="product-detail.html">
@@ -440,78 +316,6 @@ export default function Dashboard() {
         </div>
       </div>
       {/* <!-- Recent Product End --> */}
-
-      {/* <!-- Review Start --> */}
-      <div className="review">
-        <div className="container-fluid">
-          <div className="row align-items-center review-slider normal-slider">
-            <div className="col-md-6">
-              <div className="review-slider-item">
-                <div className="review-img">
-                  <img src="/assets/img/review-1.jpg" alt="Image" />
-                </div>
-                <div className="review-text">
-                  <h2>Customer Name</h2>
-                  <h3>Profession</h3>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae nunc eget leo finibus luctus et vitae lorem
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="review-slider-item">
-                <div className="review-img">
-                  <img src="/assets/img/review-2.jpg" alt="Image" />
-                </div>
-                <div className="review-text">
-                  <h2>Customer Name</h2>
-                  <h3>Profession</h3>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae nunc eget leo finibus luctus et vitae lorem
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="review-slider-item">
-                <div className="review-img">
-                  <img src="/assets/img/review-3.jpg" alt="Image" />
-                </div>
-                <div className="review-text">
-                  <h2>Customer Name</h2>
-                  <h3>Profession</h3>
-                  <div className="ratting">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae nunc eget leo finibus luctus et vitae lorem
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <!-- Review End -->      */}
     </>
   )
 }

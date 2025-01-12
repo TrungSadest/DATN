@@ -28,7 +28,6 @@
   color: #61dafb;
 }
 
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -116,13 +115,13 @@
 
 /* Line Danger */
 .line-danger {
-  background-color: #E21D34;
+  background-color: #e21d34;
   /* Màu đỏ */
 }
 
 /* Line Warning */
 .line-warning {
-  background-color: #FF9300;
+  background-color: #ff9300;
   /* Màu vàng */
 }
 
@@ -134,7 +133,7 @@
 
 /* Line Info */
 .line-info {
-  background-color: #1877F2;
+  background-color: #1877f2;
   /* Màu xanh dương nhạt */
 }
 
@@ -144,7 +143,6 @@
   /* Màu xám đen */
 }
 
-
 .or {
   padding: 0 10px;
   font-size: 12px;
@@ -152,11 +150,11 @@
 }
 
 .text-google {
-  color: #DB4437;
+  color: #db4437;
 }
 
 .text-facebook {
-  color: #1877F2;
+  color: #1877f2;
 }
 
 .text-linkedin {
@@ -173,13 +171,34 @@
   /* Thanh dọc giữa */
   border-right: 1px solid hsla(0, 0%, 100%, 0.22);
   /* Thanh dọc giữa */
-  height: .9375rem;
+  height: 0.9375rem;
   /* Chiều cao thanh */
   top: 50%;
   left: -6px;
   /* Điều chỉnh vị trí ngang của thanh */
   width: 0;
   transform: translateY(-50%);
+}
+
+.cart-icon {
+  position: relative;
+  font-size: 24px;
+  color: #ff5722; /* Màu cam giống Shopee */
+  text-decoration: none;
+}
+
+.cart-icon .cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #ff5722;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  line-height: 1;
+  text-align: center;
 }
 
 @import 'react-toastify/dist/ReactToastify.css';
