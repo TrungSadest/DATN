@@ -1,9 +1,13 @@
 package com.be.controller;
 
 
+import com.be.entity.Brands;
+import com.be.entity.Categories;
 import com.be.entity.Products;
 import com.be.model.ProductModel;
 import com.be.model.ResponseData;
+import com.be.repository.BrandRepository;
+import com.be.repository.CategoriRepository;
 import com.be.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,12 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
+
+    @Autowired
+    private CategoriRepository categoriRepository;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseData> getAll(){
@@ -43,10 +53,10 @@ public class ProductController {
             Products product = new Products();
             product.setProductName(productModel.getProductName());
             product.setThumbnail(productModel.getThumbnail());
-            product.setCategoryId(productModel.getCategoryId());
+            product.setCategories(categoriRepository.getById(productModel.getCategoryId()));
             product.setUnitPrice(productModel.getUnitPrice());
             product.setWeight(productModel.getWeight());
-            product.setBrandId(productModel.getBrandId());
+            product.setBrands(brandRepository.getById(productModel.getBrandId()));
             product.setSpecial(productModel.getSpecial());
             product.setDescription(productModel.getDescription());
             product.setDiscount(productModel.getDiscount());
@@ -60,17 +70,22 @@ public class ProductController {
             responseData.setStatus(false);
         }
         return ResponseEntity.ok(responseData)  ;
-    } @PutMapping("/update")
+    }
+    @PutMapping("/update")
     public ResponseEntity<ResponseData> update (@RequestBody ProductModel productModel){
         ResponseData responseData = new ResponseData();
             Products product = new Products();
             product.setProductId(productModel.getProductId());
             product.setProductName(productModel.getProductName());
             product.setThumbnail(productModel.getThumbnail());
-            product.setCategoryId(productModel.getCategoryId());
+            Categories category = categoriRepository.findById(productModel.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found with ID: " + productModel.getCategoryId()));
+            product.setCategories(category);
             product.setUnitPrice(productModel.getUnitPrice());
             product.setWeight(productModel.getWeight());
-            product.setBrandId(productModel.getBrandId());
+            Brands brand = brandRepository.findById(productModel.getBrandId())
+                .orElseThrow(() -> new RuntimeException("Brand not found with ID: " + productModel.getBrandId()));
+            product.setBrands(brand);
             product.setSpecial(productModel.getSpecial());
             product.setDescription(productModel.getDescription());
             product.setDiscount(productModel.getDiscount());

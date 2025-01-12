@@ -55,6 +55,6 @@ public class OrderController {
         orderRepository.save(orders);
         responseData.setStatus(true);
         responseData.setResponseData(orders);
-        return ResponseEntity.ok(responseData)  ;
+        return ResponseEntity.ok(responseData);
     }
 }

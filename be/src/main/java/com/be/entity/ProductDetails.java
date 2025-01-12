@@ -14,6 +14,13 @@ public class ProductDetails {
     @Column(name = "product_detail_id")
     private String productDetailId;
 
+    @PrePersist
+    public void generateId() {
+        if (this.productDetailId == null) {
+            this.productDetailId = "SPCT" + System.currentTimeMillis();
+        }
+    }
+
     @Column(name = "product_id")
     private String productId;
 
