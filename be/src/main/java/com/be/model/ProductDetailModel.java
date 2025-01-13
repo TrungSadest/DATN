@@ -7,7 +7,7 @@ public class ProductDetailModel {
 
     private String productId;
 
-    private Integer corlorId;
+    private Integer colorId;
 
     private Integer sizeId;
 
@@ -33,12 +33,12 @@ public class ProductDetailModel {
         this.productId = productId;
     }
 
-    public Integer getCorlorId() {
-        return corlorId;
+    public Integer getColorId() {
+        return colorId;
     }
 
-    public void setCorlorId(Integer corlorId) {
-        this.corlorId = corlorId;
+    public void setColorId(Integer corlorId) {
+        this.colorId = corlorId;
     }
 
     public Integer getSizeId() {

@@ -1,38 +1,19 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import { ProductDetailModel } from "../../model/ProductDetailModel";
+import { ColorModel } from "../../model/ColorModel";
+import { SizeModel } from "../../model/SizeModel";
 import { UploadService } from "../../service/UploadService";
-import { ProductModel } from "../../model/ProductModel";
-import { CategoryModel } from "../../model/CategoryModel";
-import { BrandModel } from "../../model/BrandModel";
-import { AuthService } from "../../service/AuthService";
-import { ProductService } from "../../service/ProductService";
 import { HttpStatusCode } from "axios";
+import { toast } from "react-toastify";
+import { ProductService } from "../../service/ProductService";
 import { generateImageUrl } from "../../util/imageUtil";
 
-export default function AddProduct(props: any) {
+export default function AddProductDetail(props: any) {
   const [model, setModel] = useState(
-    new ProductModel(
-      "",
-      "",
-      "",
-      "",
-      0,
-      0,
-      false,
-      false,
-      0,
-      0,
-      0,
-      "",
-      "",
-      "",
-      "",
-      ""
-    )
+    new ProductDetailModel("", "", 0, 0, 0, "", "")
   );
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
-  const [brands, setBrands] = useState<BrandModel[]>([]);
+  const [colors, setColors] = useState<ColorModel[]>([]);
+  const [sizes, setSizes] = useState<SizeModel[]>([]);
   const [image, setImage] = useState<string | null>(null); // Lưu URL của ảnh
   const [file, setFile] = useState<File | null>(null); // Lưu file ảnh
 
@@ -45,15 +26,13 @@ export default function AddProduct(props: any) {
   useEffect(() => {
     setModel({
       ...model,
-      thumbnail: image ?? "",
+      imageUrl: image ?? "",
     });
   }, [image]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      // const imageUrl = URL.createObjectURL(selectedFile);
-      // setImage(imageUrl);
       setFile(selectedFile); // Lưu file ảnh
     }
   };
@@ -62,18 +41,7 @@ export default function AddProduct(props: any) {
     setImage(null);
     setFile(null); // Xóa file ảnh
   };
-  const changeIsDiscount = () => {
-    setModel({
-      ...model,
-      discount: !model.discount,
-    });
-  };
-  const changeIsSpecial = () => {
-    setModel({
-      ...model,
-      special: !model.special,
-    });
-  };
+
   const changeInput = (data: any) => {
     const value = data.target.value;
     const name = data.target.name;
@@ -82,25 +50,26 @@ export default function AddProduct(props: any) {
       [name]: value,
     });
   };
+
   const saveData = () => {
     props.onSave(model);
   };
+
   useEffect(() => {
-    AuthService.getInstance()
-      .getListCategory()
+    ProductService.getInstance()
+      .getListColor()
       .then((res) => {
-        setCategories(res.data.responseData);
+        setColors(res.data.responseData);
       })
       .catch((e) => {
         console.log(e);
       });
 
     ProductService.getInstance()
-      .getListBrand()
+      .getListSize()
       .then((res) => {
-        console.log("brand");
         console.log(res);
-        setBrands(res.data.responseData);
+        setSizes(res.data.responseData);
       })
       .catch((e) => {
         console.log(e);
@@ -130,18 +99,9 @@ export default function AddProduct(props: any) {
         console.log(e);
       });
   };
-
   return (
     <>
       <div className="row">
-        {/* <div className="col-4 d-flex flex-column align-items-center justify-content-center">
-          <h4>Ảnh sản phẩm</h4>
-          <div
-            style={{ height: "300px", width: "300px" }}
-            className="bg-primary"
-          >
-          </div>
-        </div> */}
         <div className="col-lg-4 d-flex flex-column align-items-center justify-content-center">
           <h4>Ảnh sản phẩm</h4>
           <div
@@ -157,11 +117,6 @@ export default function AddProduct(props: any) {
               position: "relative",
             }}
           >
-            {/* <img
-              src="http://localhost:8080/api/files/image/c43a7882.jpg"
-              alt="Ảnh sản phẩm"
-              style={{ height: "100%", width: "100%", objectFit: "cover" }}
-            /> */}
             {image ? (
               <img
                 src={generateImageUrl(image)}
@@ -194,40 +149,39 @@ export default function AddProduct(props: any) {
         </div>
         <div className="col-lg-8">
           <div>
-            <h4>Thông tin sản phẩm</h4>
+            <h4>Thông tin sản phẩm chi tiết</h4>
           </div>
           <div>
             <div className="row mb-3">
               <div className="col-lg-6">
                 <label htmlFor="" className="form-label font-semibold">
-                  Tên sản phẩm
-                </label>
-                <input
-                  onChange={changeInput}
-                  type="text"
-                  name="productName"
-                  id="productName"
-                  value={model.productName}
-                  className="form-control"
-                />
-              </div>
-              <div className="col-lg-6">
-                <label htmlFor="" className="form-label font-semibold">
-                  Chọn danh mục
+                  Chọn Màu sắc
                 </label>
                 <select
                   onChange={changeInput}
-                  name="categoryId"
-                  id="categoryId"
+                  name="colorId"
+                  id="colorId"
                   className="form-select pointer"
                   aria-label="Default select example"
                 >
-                 
-                  {categories.map((category) => (
-                    <option value={category.categoryId}>
-                      {" "}
-                      {category.categoryName}
-                    </option>
+                  {colors.map((color) => (
+                    <option value={color.colorId}> {color.colorName}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-lg-6">
+                <label htmlFor="" className="form-label font-semibold">
+                  Chọn Kích thước
+                </label>
+                <select
+                  onChange={changeInput}
+                  name="sizeId"
+                  id="sizeId"
+                  className="form-select pointer"
+                  aria-label="Default select example"
+                >
+                  {sizes.map((size) => (
+                    <option value={size.sizeId}> {size.sizeName}</option>
                   ))}
                 </select>
               </div>
@@ -235,89 +189,16 @@ export default function AddProduct(props: any) {
             <div className="row mb-3">
               <div className="col-lg-4">
                 <label htmlFor="" className="form-label font-semibold">
-                  Đơn giá
+                  Số lượng
                 </label>
                 <input
                   onChange={changeInput}
                   type="text"
-                  name="unitPrice"
-                  id="unitPrice"
-                  value={model.unitPrice === 0 ? "" : model.unitPrice}
+                  name="quantity"
+                  id="quantity"
+                  value={model.quantity === 0 ? "" : model.quantity}
                   className="form-control"
                 />
-              </div>
-              <div className="col-lg-4">
-                <label htmlFor="" className="form-label font-semibold">
-                  Trọng lượng <i>(gam)</i>
-                </label>
-                <input
-                  onChange={changeInput}
-                  type="text"
-                  name="weight"
-                  id="weight"
-                  value={model.weight === 0 ? "" : model.weight}
-                  className="form-control"
-                />
-              </div>
-              <div className="col-lg-4">
-                <label htmlFor="" className="form-label font-semibold">
-                  Chọn thương hiệu
-                </label>
-                <select
-                  onChange={changeInput}
-                  name="brandId"
-                  id="brandId"
-                  className="form-select pointer"
-                  aria-label="Default select example"
-                >
-                  
-                  {brands.map((brand) => (
-                    <option value={brand.brandId}> {brand.brandName}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="form-check form-switch mb-2">
-                  <input
-                    onChange={() => {
-                      changeIsSpecial();
-                    }}
-                    checked={model.special ?? false}
-                    className="pointer form-check-input"
-                    type="checkbox"
-                  />
-                  <label className="form-check-label font-semibold">
-                    Sản phẩm đặc biệt
-                  </label>
-                </div>
-                <div className="form-check form-switch">
-                  <input
-                    onChange={() => {
-                      changeIsDiscount();
-                    }}
-                    checked={model.discount ?? false}
-                    className="pointer form-check-input"
-                    type="checkbox"
-                  />
-                  <label className="form-check-label font-semibold">
-                    Khuyến mãi
-                  </label>
-                </div>
-                {model && model.discount === true && (
-                  <div>
-                    <input
-                      onChange={changeInput}
-                      type="text"
-                      name="discountPrice"
-                      id="discountPrice"
-                      value={model.discountPrice}
-                      className="form-control"
-                      placeholder="Nhập giá khuyến mãi"
-                    />
-                  </div>
-                )}
               </div>
               <div className="col-lg-8">
                 <div>
@@ -335,6 +216,7 @@ export default function AddProduct(props: any) {
                 </div>
               </div>
             </div>
+            <div className="row"></div>
           </div>
         </div>
       </div>

@@ -104,7 +104,7 @@ const Product: React.FC = () => {
   };
 
   const handleProductDetail = (data: any) => {
-    navigate("/product-detail",{ state: { id: data }} )
+    navigate("/product-detail",{ state: { id: data.productId,name: data.productName }} )
   };
   return (
     <>
@@ -161,7 +161,7 @@ const Product: React.FC = () => {
           <Column
             field="thumbnail"
             header="Ảnh"
-            style={{ width: "25%" }}
+            style={{ width: "20%" }}
             body={(rowData, options) => (
               <img
                 style={{ width: "70px" }}
@@ -173,17 +173,22 @@ const Product: React.FC = () => {
           <Column
             field="productName"
             header="Tên sản phẩm"
-            style={{ width: "25%" }}
+            style={{ width: "20%" }}
           ></Column>
           <Column
             field="categories.categoryName"
             header="Danh mục"
-            style={{ width: "25%" }}
+            style={{ width: "20%" }}
           ></Column>
           <Column
             field="brands.brandName"
             header="Thương hiệu"
-            style={{ width: "25%" }}
+            style={{ width: "20%" }}
+          ></Column>
+          <Column
+            field="unitPrice"
+            header="Giá"
+            style={{ width: "20%" }}
           ></Column>
           <Column
             header="Action"
@@ -193,7 +198,7 @@ const Product: React.FC = () => {
                 <Button
                   className="p-button-success"
                   onClick={() => {
-                    handleProductDetail(rowData.productId);
+                    handleProductDetail(rowData);
                   }}
                 >
                   <i className="bi bi-info-circle"></i>

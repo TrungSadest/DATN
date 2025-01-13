@@ -1,7 +1,7 @@
 export class ProductDetailModel {
   productDetailId: string;
   productId: string;
-  corlorId: number;
+  colorId: number;
   sizeId: number;
   quantity: number;
   description: string;
@@ -9,7 +9,7 @@ export class ProductDetailModel {
   constructor(
     productDetailId: string,
     productId: string,
-    corlorId: number,
+    colorId: number,
     sizeId: number,
     quantity: number,
     description: string,
@@ -17,7 +17,7 @@ export class ProductDetailModel {
   ) {
     this.productDetailId = productDetailId;
     this.productId = productId;
-    this.corlorId = corlorId;
+    this.colorId = colorId;
     this.sizeId = sizeId;
     this.quantity = quantity;
     this.description = description;
@@ -35,8 +35,8 @@ export class ProductDetailModel {
       productDetailModel.productId = productDetailModelObject.productId
         ? productDetailModelObject.productId
         : "";
-      productDetailModel.corlorId = productDetailModelObject.corlorId
-        ? productDetailModelObject.corlorId
+      productDetailModel.colorId = productDetailModelObject.colorId
+        ? productDetailModelObject.colorId
         : 0;
       productDetailModel.sizeId = productDetailModelObject.sizeId
         ? productDetailModelObject.sizeId

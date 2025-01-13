@@ -1,6 +1,7 @@
 import axios from "axios";
 import { HeadersUtil } from "../util/headersUtil";
 import { ProductModel } from "../model/ProductModel";
+import { ProductDetailModel } from "../model/ProductDetailModel";
 
 export class ProductService {
     private static _productService: ProductService;
@@ -18,6 +19,18 @@ export class ProductService {
           headers: HeadersUtil.getHeadersAuth(),
         });
     }
+    public getListColor(){
+      const url = process.env.REACT_APP_API_URL + "/color/get-all";
+      return axios.get(url,{
+        headers: HeadersUtil.getHeadersAuth(),
+      });
+    }
+    public getListSize(){
+      const url = process.env.REACT_APP_API_URL + "/size/get-all";
+      return axios.get(url,{
+        headers: HeadersUtil.getHeadersAuth(),
+      });
+  }
 
     public getListProduct(){
         const url = process.env.REACT_APP_API_URL + "/product/get-all";
@@ -44,5 +57,10 @@ export class ProductService {
             headers: HeadersUtil.getHeadersAuth(),
         });
     }
-    
+    public addProductDetail(request: ProductDetailModel){
+      const url = process.env.REACT_APP_API_URL + "/product-detail/add";
+      return axios.post(url , request,{
+        headers: HeadersUtil.getHeadersAuth(),
+      });
+    }
 }

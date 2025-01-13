@@ -6,15 +6,24 @@ import { generateImageUrl } from '../../util/imageUtil';
 import { Button } from 'primereact/button';
 import { ProductDetailModel } from '../../model/ProductDetailModel';
 import { ProductService } from '../../service/ProductService';
+import { Dialog } from 'primereact/dialog';
+import AddProductDetail from './AddProductDetail';
+import { toast } from 'react-toastify';
 
 const ProductDetail: React.FC = () => {
     const location = useLocation();
-    const state = location.state as { id: String };
+    const state = location.state as { id: string , name: string};
     const [openAdd, setOpenAdd] = useState(false);
     const [closeAdd, setCloseAdd] = useState();
     const [model, setModel] = useState<ProductDetailModel[]>([]);
+    const [productDetail, setProductDetail] = useState<ProductDetailModel>();
     const navigate = useNavigate();
-
+    const handleClose = (data?: any) => {
+      setOpenAdd(false);
+      if (data) {
+        // Thực hiện việc tiếp
+      }
+    };
     useEffect(() => {
         ProductService.getInstance()
           .getListProductDetail(state.id)
@@ -25,15 +34,43 @@ const ProductDetail: React.FC = () => {
           .catch((e) => {
             console.log(e);
           });
-      }, [openAdd ]);
+      }, [openAdd]);
 
     const handleNavigate = () => {
         navigate("/product");
     };
+
+    const handleSave = (data: any) => {
+      const newProductDetail = { ...data, productId: state.id };
+      setProductDetail(newProductDetail);   
+        ProductService.getInstance()
+          .addProductDetail(newProductDetail)
+          .then((res) => {
+            console.log(res);
+            toast.success("Thêm sản phẩm thành công");
+            setOpenAdd(false);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        console.log(data);
+      };
   return (
     <>
+    <Dialog
+            header="Thêm sản phẩm chi tiết"
+            visible={openAdd}
+            style={{ width: "80vw" }}
+            onHide={() => {
+              if (!openAdd) return;
+              setOpenAdd(false);
+            }}
+          >
+            <AddProductDetail onSave={handleSave} onClose={handleClose} />
+          </Dialog>
     <div className="d-flex justify-content-between mb-3">
         <h2>Sản phẩm chi tiết</h2>
+        <h2>{state.name}</h2>
         <div className="">
         <button
           className="btn btn-primary"
@@ -78,12 +115,12 @@ const ProductDetail: React.FC = () => {
                   )}
                 ></Column>
                 <Column
-                  field="corlorId"
+                  field="color.colorName"
                   header="Màu sắc"
                   style={{ width: "25%" }}
                 ></Column>
                 <Column
-                  field="sizeId"
+                  field="size.sizeName"
                   header="Kích thước"
                   style={{ width: "25%" }}
                 ></Column>

@@ -24,11 +24,13 @@ public class ProductDetails {
     @Column(name = "product_id")
     private String productId;
 
-    @Column(name = "corlor_id")
-    private Integer corlorId;
+    @ManyToOne
+    @JoinColumn(name = "corlor_id")
+    private Colors color;
 
-    @Column(name = "size_id")
-    private Integer sizeId;
+    @ManyToOne
+    @JoinColumn(name = "size_id")
+    private Sizes size;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -55,20 +57,20 @@ public class ProductDetails {
         this.productId = productId;
     }
 
-    public Integer getCorlorId() {
-        return corlorId;
+    public Colors getColor() {
+        return color;
     }
 
-    public void setCorlorId(Integer corlorId) {
-        this.corlorId = corlorId;
+    public void setColor(Colors color) {
+        this.color = color;
     }
 
-    public Integer getSizeId() {
-        return sizeId;
+    public Sizes getSize() {
+        return size;
     }
 
-    public void setSizeId(Integer sizeId) {
-        this.sizeId = sizeId;
+    public void setSize(Sizes size) {
+        this.size = size;
     }
 
     public Integer getQuantity() {

@@ -1,9 +1,14 @@
 package com.be.controller;
 
+import com.be.entity.Categories;
+import com.be.entity.Colors;
 import com.be.entity.ProductDetails;
+import com.be.entity.Sizes;
 import com.be.model.ProductDetailModel;
 import com.be.model.ResponseData;
+import com.be.repository.ColorRepository;
 import com.be.repository.ProductDetailRepository;
+import com.be.repository.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +20,10 @@ import java.util.List;
 public class ProductDetailController {
     @Autowired
     private ProductDetailRepository productDetailRepository;
-
+    @Autowired
+    private ColorRepository colorRepository;
+    @Autowired
+    private SizeRepository sizeRepository;
     @GetMapping("/get-all")
     public ResponseEntity<ResponseData> getAll(){
         ResponseData responseData = new ResponseData();
@@ -52,8 +60,12 @@ public class ProductDetailController {
 
             ProductDetails productDetails = new ProductDetails();
             productDetails.setProductId(productDetailModel.getProductId());
-            productDetails.setCorlorId(productDetailModel.getCorlorId());
-            productDetails.setSizeId(productDetailModel.getSizeId());
+            Colors colors = colorRepository.findById(productDetailModel.getColorId())
+                    .orElseThrow(() -> new RuntimeException("Color not found with ID: " + productDetailModel.getColorId()));
+            productDetails.setColor(colors);
+            Sizes sizes = sizeRepository.findById(productDetailModel.getSizeId())
+                    .orElseThrow(() -> new RuntimeException("Category not found with ID: " + productDetailModel.getSizeId()));
+            productDetails.setSize(sizes);
             productDetails.setQuantity(productDetailModel.getQuantity());
             productDetails.setDescription(productDetailModel.getDescription());
             productDetails.setImageUrl(productDetailModel.getImageUrl());
