@@ -38,4 +38,11 @@ export class ProductService {
           headers: HeadersUtil.getHeadersAuth(),
         });
       }
+      public getListProductDetail(props: String) {
+        const url = `${process.env.REACT_APP_API_URL}/product-detail/get-by/${props}`;
+        return axios.get(url, {
+            headers: HeadersUtil.getHeadersAuth(),
+        });
+    }
+    
 }

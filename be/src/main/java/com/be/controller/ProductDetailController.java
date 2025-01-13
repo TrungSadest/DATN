@@ -30,6 +30,20 @@ public class ProductDetailController {
         }
         return ResponseEntity.ok(responseData)  ;
     }
+    @GetMapping("/get-by/{id}")
+    public ResponseEntity<ResponseData> getById(@PathVariable String id){
+        ResponseData responseData = new ResponseData();
+        try {
+            List<ProductDetails> list = productDetailRepository.getAllByProductId(id);
+            responseData.setResponseData(list);
+            responseData.setStatus(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData)  ;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<ResponseData> add (@RequestBody ProductDetailModel productDetailModel){

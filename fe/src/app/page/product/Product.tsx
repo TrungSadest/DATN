@@ -9,11 +9,12 @@ import { ProductModel } from "../../model/ProductModel";
 import UpdateProduct from "./UpdateProduct";
 import { generateImageUrl } from "../../util/imageUtil";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Product: React.FC = () => {
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [openAdd, setOpenAdd] = useState(false);
-
+  const navigate = useNavigate();
   const handleClose = (data?: any) => {
     setOpenAdd(false);
     if (data) {
@@ -102,6 +103,9 @@ const Product: React.FC = () => {
     setOpenUpdate(true);
   };
 
+  const handleProductDetail = (data: any) => {
+    navigate("/product-detail",{ state: { id: data }} )
+  };
   return (
     <>
       <Dialog
@@ -185,6 +189,15 @@ const Product: React.FC = () => {
             header="Action"
             body={(rowData) => (
               <>
+                <div className="d-flex ">
+                <Button
+                  className="p-button-success"
+                  onClick={() => {
+                    handleProductDetail(rowData.productId);
+                  }}
+                >
+                  <i className="bi bi-info-circle"></i>
+                </Button>
                 <Button
                   className="p-button-success"
                   onClick={() => {
@@ -193,6 +206,7 @@ const Product: React.FC = () => {
                 >
                   <i className="bi bi-pencil-square"></i>
                 </Button>
+                </div>
               </>
             )}
             style={{ width: "25%" }}
