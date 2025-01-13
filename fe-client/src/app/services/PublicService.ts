@@ -35,4 +35,8 @@ export class PublicService {
     const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/insert-user-role');
     return axios.post(url, userRole);
   }
+  public getListProduct() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-all');
+    return axios.get(url);
+  }
 }
