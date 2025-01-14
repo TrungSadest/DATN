@@ -112,7 +112,7 @@ export default function Product() {
                                             </div>
                                             <div className="product-price">
                                                 <div className='sub-price text-center'>
-                                                    <h3>{(product.unitPrice * 100).toLocaleString()}<span>đ</span></h3>
+                                                    <h3>{(product.unitPrice).toLocaleString()}<span>đ</span></h3>
                                                     <div>
                                                         <del className='text-muted'>100.000đ</del>
                                                     </div>

@@ -10,11 +10,15 @@ export default function ProductDetail() {
     const location = useLocation();
     const { product } = location.state as { product: ProductModel };
     const [productDetail, setProductDetail] = useState<ProductDetailModel[]>([]);
+    // const [prod, setProd] = useState<ProductModel>();
+
+
+
     useEffect(() => {
         console.log(product);
         if (product.productId) {
             PublicService.getInstance().getProductDetailByProductId(product.productId).then(res => {
-                console.log(res);
+                console.log(res.data.responseData);
                 setProductDetail(res.data.responseData);
             }).catch(e => {
                 console.log(e);
@@ -47,7 +51,22 @@ export default function ProductDetail() {
                                         </div> */}
                                         <div className="price">
                                             <h4>Đơn giá:</h4>
-                                            <p> <span>{product.unitPrice.toLocaleString()}đ</span></p>
+                                            {
+                                                product.discount === true &&
+                                                <p>
+                                                    {product.discountPrice.toLocaleString()}đ
+                                                    <span>{product.unitPrice.toLocaleString()}đ
+                                                    </span>
+                                                </p>
+                                            }
+                                            {
+                                                product.discount === false &&
+                                                <p>
+                                                    {product.unitPrice.toLocaleString()}đ
+                                                    {/* <span>{product.unitPrice.toLocaleString()}đ
+                                                    </span> */}
+                                                </p>
+                                            }
                                         </div>
                                         <div className="quantity">
                                             <h4>Quantity:</h4>
