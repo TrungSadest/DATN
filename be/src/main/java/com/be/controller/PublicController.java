@@ -6,13 +6,11 @@ import com.be.model.CategoryModel;
 import com.be.model.ResponseData;
 import com.be.repository.BrandRepository;
 import com.be.repository.CategoriRepository;
+import com.be.repository.ProductDetailRepository;
 import com.be.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +24,8 @@ public class PublicController {
     private CategoriRepository categoriRepository;
     @Autowired
     private BrandRepository brandRepository;
+    @Autowired
+    private ProductDetailRepository productDetailRepository;
 
     @GetMapping("/product/get-all")
     public ResponseEntity<ResponseData> getAllProduct(){
@@ -95,6 +95,20 @@ public class PublicController {
             brands.setBrandName(brandModel.getBrandName());
             List<Products> products = productRepository.findProductsByBrands(brands);
             responseData.setResponseData(products);
+            responseData.setStatus(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData)  ;
+    }
+    @GetMapping("/product-detail/get-by/{id}")
+    public ResponseEntity<ResponseData> getById(@PathVariable String id){
+        ResponseData responseData = new ResponseData();
+        try {
+            List<ProductDetails> list = productDetailRepository.getAllByProductId(id);
+            responseData.setResponseData(list);
             responseData.setStatus(true);
         }
         catch (Exception e) {

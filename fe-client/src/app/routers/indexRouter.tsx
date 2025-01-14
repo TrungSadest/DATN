@@ -15,6 +15,7 @@ import BuyComponent from '../pages/buy/BuyComponent';
 import SellComponent from '../pages/sell/SellComponent';
 import Product from '../pages/product/Product';
 import Cart from '../pages/cart/Cart';
+import ProductDetail from '../pages/product/ProductDetail';
 
 export const indexRouter: any = {
   path: '/',
@@ -32,7 +33,8 @@ export const indexRouter: any = {
     { path: '/about', element: <About /> },
     {
       path: '/product', children: [
-        { path: '', element: <Product /> }
+        { path: '', element: <Product /> },
+        { path: 'detail', element: <ProductDetail /> },
       ]
     },
     {

@@ -4,11 +4,12 @@ import { PublicService } from '../../services/PublicService';
 import { generateImageUrl } from '../../utils/imageUtil';
 import { CategoryModel } from '../../model/CategoryModel';
 import { BrandModel } from '../../model/BrandModel';
+import { useNavigate } from 'react-router-dom';
+import SideBarProduct from './SideBarProduct';
 
 export default function Product() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<ProductModel[]>([]);
-    const [categories, setCategories] = useState<CategoryModel[]>([]);
-    const [brands, setBrands] = useState<BrandModel[]>([]);
     useEffect(() => {
         PublicService.getInstance().getListProduct()
             .then((res) => {
@@ -18,21 +19,10 @@ export default function Product() {
             .catch((e) => {
                 console.log(e);
             });
-        PublicService.getInstance().getListCategory()
-            .then((res) => {
-                setCategories(res.data.responseData);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-        PublicService.getInstance().getListBrand()
-            .then((res) => {
-                setBrands(res.data.responseData);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
     }, []);
+    const viewDetail = (product: ProductModel) => {
+        navigate("detail", { state: { product } });
+    }
 
     useEffect(() => {
 
@@ -79,10 +69,10 @@ export default function Product() {
                                 </div>
 
                                 {products.map((product) => (
-                                    <div key={product.productId} className="pointer col-lg-3 col-md-4 col-sm-6">
+                                    <div key={product.productId} onClick={() => { viewDetail(product) }} className="pointer col-lg-3 col-md-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="product-title">
-                                                <a href="#">{product.productName}</a>
+                                                <a>{product.productName}</a>
                                                 <div className="ratting">
                                                     <i className="fa fa-star"></i>
                                                     <i className="fa fa-star"></i>
@@ -92,13 +82,13 @@ export default function Product() {
                                                 </div>
                                             </div>
                                             <div className="product-image">
-                                                <a href="product-detail.html">
+                                                <a  >
                                                     <img src={generateImageUrl(product.thumbnail ?? "")} />
                                                 </a>
                                                 {/* <div className="product-action">
-                                                    <a href="#"><i className="fa fa-cart-plus"></i></a>
-                                                    <a href="#"><i className="fa fa-heart"></i></a>
-                                                    <a href="#"><i className="fa fa-search"></i></a>
+                                                    <a><i className="fa fa-cart-plus"></i></a>
+                                                    <a><i className="fa fa-heart"></i></a>
+                                                    <a><i className="fa fa-search"></i></a>
                                                 </div> */}
                                             </div>
                                             <div className="product-price">
@@ -110,7 +100,7 @@ export default function Product() {
                                                 </div>
 
                                                 {/* <div>
-                                                    <a className="btn" href=""><i className="fa fa-cart-plus"></i></a>
+                                                    <a className="btn" ><i className="fa fa-cart-plus"></i></a>
                                                 </div> */}
                                             </div>
                                         </div>
@@ -126,13 +116,13 @@ export default function Product() {
                                 <nav aria-label="Page navigation example">
                                     <ul className="pagination justify-content-center">
                                         <li className="page-item disabled">
-                                            <a className="page-link" href="#" >Previous</a>
+                                            <a className="page-link" >Previous</a>
                                         </li>
-                                        <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                        <li className="page-item active"><a className="page-link">1</a></li>
+                                        <li className="page-item"><a className="page-link">2</a></li>
+                                        <li className="page-item"><a className="page-link">3</a></li>
                                         <li className="page-item">
-                                            <a className="page-link" href="#">Next</a>
+                                            <a className="page-link">Next</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -141,25 +131,7 @@ export default function Product() {
                         </div>
 
                         {/* <!-- Side Bar Start --> */}
-                        <div className="col-lg-3 sidebar">
-                            <div className="sidebar-widget brands">
-                                <h2 className="title">Danh mục</h2>
-                                <ul>
-                                    {categories.map((category) => (
-                                        <li key={category.categoryId}><a className='pointer'>{category.categoryName} </a><span>(45)</span></li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="sidebar-widget brands">
-                                <h2 className="title">Thương hiệu</h2>
-                                <ul>
-                                    {brands.map((brand) => (
-                                        <li key={brand.brandId}><a className='pointer'>{brand.brandName} </a><span>(45)</span></li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+                        <SideBarProduct />
                         {/* <!-- Side Bar End --> */}
                     </div>
                 </div>
