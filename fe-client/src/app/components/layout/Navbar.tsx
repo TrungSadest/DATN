@@ -61,7 +61,7 @@ export default function Navbar() {
     return (
         <>
             <nav className="z-999 navbar navbar-expand-lg bg-white navbar-light py-lg-0 px-lg-0 text-center shadow-sm">
-                <div className='container'>
+                <div className='container-fluid'>
                     <div className='d-flex'>
                         <a onClick={() => { handleMenuClick('/dashboard') }} className="pointer d-flex align-content-center navbar-brand ms-lg-5">
                             <img style={{ width: '50px' }} src="/assets/img/favicon.ico" alt="" />
