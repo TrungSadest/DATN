@@ -57,14 +57,13 @@ public class ProductDetailController {
     public ResponseEntity<ResponseData> add (@RequestBody ProductDetailModel productDetailModel){
         ResponseData responseData = new ResponseData();
         try {
-
-            ProductDetails productDetails = new ProductDetails();
-            productDetails.setProductId(productDetailModel.getProductId());
             Colors colors = colorRepository.findById(productDetailModel.getColorId())
                     .orElseThrow(() -> new RuntimeException("Color not found with ID: " + productDetailModel.getColorId()));
-            productDetails.setColor(colors);
             Sizes sizes = sizeRepository.findById(productDetailModel.getSizeId())
                     .orElseThrow(() -> new RuntimeException("Category not found with ID: " + productDetailModel.getSizeId()));
+            ProductDetails productDetails = new ProductDetails();
+            productDetails.setProductId(productDetailModel.getProductId());
+            productDetails.setColor(colors);
             productDetails.setSize(sizes);
             productDetails.setQuantity(productDetailModel.getQuantity());
             productDetails.setDescription(productDetailModel.getDescription());

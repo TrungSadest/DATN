@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ApiUrlUtil } from '../utils/apiUrlUtil';
 import { UserRoleModel } from '../model/UserRoleModel';
+import { CategoryModel } from '../model/CategoryModel';
 
 export class PublicService {
   private static _publicService: PublicService;
@@ -37,6 +38,22 @@ export class PublicService {
   }
   public getListProduct() {
     const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-all');
+    return axios.get(url);
+  }
+  public getListCategory() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/category/get-all');
+    return axios.get(url);
+  }
+  public getListBrand() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/brand/get-all');
+    return axios.get(url);
+  }
+  public getListProductByCategory() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-by-category');
+    return axios.get(url);
+  }
+  public getListProductByBrand() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-by-brand');
     return axios.get(url);
   }
 }

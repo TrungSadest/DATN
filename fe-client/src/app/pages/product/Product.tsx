@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { ProductModel } from '../../model/ProductModel';
 import { PublicService } from '../../services/PublicService';
 import { generateImageUrl } from '../../utils/imageUtil';
+import { CategoryModel } from '../../model/CategoryModel';
+import { BrandModel } from '../../model/BrandModel';
 
 export default function Product() {
     const [products, setProducts] = useState<ProductModel[]>([]);
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [brands, setBrands] = useState<BrandModel[]>([]);
     useEffect(() => {
         PublicService.getInstance().getListProduct()
             .then((res) => {
@@ -13,6 +17,24 @@ export default function Product() {
             .catch((e) => {
                 console.log(e);
             });
+        PublicService.getInstance().getListCategory()
+            .then((res) => {
+                setCategories(res.data.responseData);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+        PublicService.getInstance().getListBrand()
+            .then((res) => {
+                setBrands(res.data.responseData);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, []);
+
+    useEffect(() => {
+
     }, []);
     return (
         <>
@@ -114,24 +136,18 @@ export default function Product() {
                             <div className="sidebar-widget brands">
                                 <h2 className="title">Category</h2>
                                 <ul>
-                                    <li><a href="#">Nulla </a><span>(45)</span></li>
-                                    <li><a href="#">Curabitur </a><span>(34)</span></li>
-                                    <li><a href="#">Nunc </a><span>(67)</span></li>
-                                    <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                                    <li><a href="#">Fusce </a><span>(89)</span></li>
-                                    <li><a href="#">Sagittis</a><span>(28)</span></li>
+                                    {categories.map((category) => (
+                                        <li><a>{category.categoryName} </a><span>(45)</span></li>
+                                    ))}
                                 </ul>
                             </div>
 
                             <div className="sidebar-widget brands">
                                 <h2 className="title">Our Brands</h2>
                                 <ul>
-                                    <li><a href="#">Nulla </a><span>(45)</span></li>
-                                    <li><a href="#">Curabitur </a><span>(34)</span></li>
-                                    <li><a href="#">Nunc </a><span>(67)</span></li>
-                                    <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                                    <li><a href="#">Fusce </a><span>(89)</span></li>
-                                    <li><a href="#">Sagittis</a><span>(28)</span></li>
+                                    {brands.map((brand) => (
+                                        <li><a>{brand.brandName} </a><span>(45)</span></li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
