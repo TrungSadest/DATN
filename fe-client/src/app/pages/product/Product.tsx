@@ -12,6 +12,7 @@ export default function Product() {
     useEffect(() => {
         PublicService.getInstance().getListProduct()
             .then((res) => {
+                console.log(res.data.responseData);
                 setProducts(res.data.responseData);
             })
             .catch((e) => {
@@ -78,7 +79,7 @@ export default function Product() {
                                 </div>
 
                                 {products.map((product) => (
-                                    <div className="col-md-3">
+                                    <div key={product.productId} className="pointer col-lg-3 col-md-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="product-title">
                                                 <a href="#">{product.productName}</a>
@@ -94,15 +95,23 @@ export default function Product() {
                                                 <a href="product-detail.html">
                                                     <img src={generateImageUrl(product.thumbnail ?? "")} />
                                                 </a>
-                                                <div className="product-action">
+                                                {/* <div className="product-action">
                                                     <a href="#"><i className="fa fa-cart-plus"></i></a>
                                                     <a href="#"><i className="fa fa-heart"></i></a>
                                                     <a href="#"><i className="fa fa-search"></i></a>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="product-price">
-                                                <h3><span>$</span>{product.unitPrice}</h3>
-                                                <a className="btn" href=""><i className="fa fa-shopping-cart"></i>Buy Now</a>
+                                                <div className='sub-price text-center'>
+                                                    <h3>{(product.unitPrice * 100).toLocaleString()}<span>đ</span></h3>
+                                                    <div>
+                                                        <del className='text-muted'>100.000đ</del>
+                                                    </div>
+                                                </div>
+
+                                                {/* <div>
+                                                    <a className="btn" href=""><i className="fa fa-cart-plus"></i></a>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
@@ -134,19 +143,19 @@ export default function Product() {
                         {/* <!-- Side Bar Start --> */}
                         <div className="col-lg-3 sidebar">
                             <div className="sidebar-widget brands">
-                                <h2 className="title">Category</h2>
+                                <h2 className="title">Danh mục</h2>
                                 <ul>
                                     {categories.map((category) => (
-                                        <li><a>{category.categoryName} </a><span>(45)</span></li>
+                                        <li key={category.categoryId}><a className='pointer'>{category.categoryName} </a><span>(45)</span></li>
                                     ))}
                                 </ul>
                             </div>
 
                             <div className="sidebar-widget brands">
-                                <h2 className="title">Our Brands</h2>
+                                <h2 className="title">Thương hiệu</h2>
                                 <ul>
                                     {brands.map((brand) => (
-                                        <li><a>{brand.brandName} </a><span>(45)</span></li>
+                                        <li key={brand.brandId}><a className='pointer'>{brand.brandName} </a><span>(45)</span></li>
                                     ))}
                                 </ul>
                             </div>

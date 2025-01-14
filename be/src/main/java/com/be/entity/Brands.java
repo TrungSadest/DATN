@@ -1,19 +1,11 @@
 package com.be.entity;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "brands")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Brands {
     @Id
     @Column(name = "brand_id")
@@ -24,4 +16,39 @@ public class Brands {
 
     @Column(name = "logo")
     private String logo;
+
+    @OneToMany(mappedBy = "brands")
+    private List<Products> products = new ArrayList<>();
+
+    public Integer getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public List<Products> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Products> products) {
+        this.products = products;
+    }
 }

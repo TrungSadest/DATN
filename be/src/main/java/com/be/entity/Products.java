@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import com.be.entity.Brands;
 
 @Entity
 @Table(name = "products")
@@ -45,6 +46,7 @@ public class Products {
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
+    @JsonIgnore
     private Brands brands;
 
 
