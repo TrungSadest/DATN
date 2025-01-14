@@ -9,10 +9,7 @@ import com.be.repository.CategoriRepository;
 import com.be.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -94,6 +91,20 @@ public class PublicController {
             brands.setBrandId(brandModel.getBrandId());
             brands.setBrandName(brandModel.getBrandName());
             List<Products> products = productRepository.findProductsByBrands(brands);
+            responseData.setResponseData(products);
+            responseData.setStatus(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData)  ;
+    }
+    @GetMapping("/product/get-by-productName/{productName}")
+    public ResponseEntity<ResponseData> getProductByProductName(@PathVariable String productName){
+        ResponseData responseData = new ResponseData();
+        try {
+            List<Products> products = productRepository.findProductsByProductNameLike("%"+productName+"%");
             responseData.setResponseData(products);
             responseData.setStatus(true);
         }

@@ -56,4 +56,8 @@ export class PublicService {
     const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-by-brand');
     return axios.get(url);
   }
+  public getListProductByProductName(res: string) {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product/get-by-productName/' + { res });
+    return axios.get(url);
+  }
 }

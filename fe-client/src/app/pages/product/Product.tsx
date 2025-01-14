@@ -9,6 +9,7 @@ export default function Product() {
     const [products, setProducts] = useState<ProductModel[]>([]);
     const [categories, setCategories] = useState<CategoryModel[]>([]);
     const [brands, setBrands] = useState<BrandModel[]>([]);
+    const [productName, setProductName] = useState<string>();
     useEffect(() => {
         PublicService.getInstance().getListProduct()
             .then((res) => {
@@ -35,8 +36,21 @@ export default function Product() {
     }, []);
 
     useEffect(() => {
-
-    }, []);
+        console.log(productName);
+    }, [productName]);
+    const handleOnChane = (data: any) => {
+        setProductName(data.target.value)
+    };
+    const handleSearch = () => {
+        PublicService.getInstance()
+            .getListProductByProductName(productName ?? "")
+            .then((res) => {
+                setProducts(res.data.responseData);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
     return (
         <>
             {/* <!-- Product List Start --> */}
@@ -50,8 +64,11 @@ export default function Product() {
                                         <div className="row">
                                             <div className="col-md-4">
                                                 <div className="product-search">
-                                                    <input className='form-control' type="email" placeholder='Tìm kiếm' />
-                                                    <button><i className="fa fa-search"></i></button>
+                                                    <input value={productName}
+                                                        onChange={handleOnChane}
+                                                        className='form-control'
+                                                        type="text" placeholder='Tìm kiếm' />
+                                                    <button onClick={handleSearch}><i className="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
