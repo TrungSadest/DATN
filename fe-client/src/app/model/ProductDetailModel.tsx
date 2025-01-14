@@ -1,56 +1,34 @@
+export class ColorModel {
+  colorId?: string;
+  colorName?: string;
+  colorCode?: string;
+  constructor(colerId?: string, corlorName?: string, colorCode?: string) {
+    this.colorId = colerId;
+    this.colorCode = colorCode;
+    this.colorName = corlorName;
+  };
+}
+export class SizeModel {
+  sizeId?: string;
+  sizeName?: string;
+  constructor(sizesId?: string, sizesName?: string) {
+    this.sizeId = sizesId;
+    this.sizeName = sizesName;
+  };
+}
 export class ProductDetailModel {
-  productDetailId: string;
-  productId: string;
-  colorId: number;
-  sizeId: number;
-  quantity: number;
-  description: string;
-  imageUrl: string;
-  constructor(
-    productDetailId: string,
-    productId: string,
-    colorId: number,
-    sizeId: number,
-    quantity: number,
-    description: string,
-    imageUrl: string
-  ) {
+  productDetailId?: string;
+  productId?: string;
+  color?: ColorModel;
+  size?: SizeModel;
+  imageUrl?: string;
+  quantity?: number;
+  constructor(productDetailId?: string, productId?: string, color?: ColorModel, sizeModel?: SizeModel, imageUrl?: string, quantity?: number) {
     this.productDetailId = productDetailId;
     this.productId = productId;
-    this.colorId = colorId;
-    this.sizeId = sizeId;
-    this.quantity = quantity;
-    this.description = description;
+    this.color = color;
+    this.size = sizeModel;
     this.imageUrl = imageUrl;
-  }
-
-  static fromJSON(productDetailModelObject: any): ProductDetailModel | null {
-    let productDetailModel: ProductDetailModel | null = null;
-    if (productDetailModelObject) {
-      productDetailModel = new ProductDetailModel("", "", 0, 0, 0, "", "");
-      productDetailModel.productDetailId =
-        productDetailModelObject.productDetailId
-          ? productDetailModelObject.productDetailId
-          : "";
-      productDetailModel.productId = productDetailModelObject.productId
-        ? productDetailModelObject.productId
-        : "";
-      productDetailModel.colorId = productDetailModelObject.colorId
-        ? productDetailModelObject.colorId
-        : 0;
-      productDetailModel.sizeId = productDetailModelObject.sizeId
-        ? productDetailModelObject.sizeId
-        : 0;
-      productDetailModel.quantity = productDetailModelObject.quantity
-        ? productDetailModelObject.quantity
-        : 0;
-      productDetailModel.description = productDetailModelObject.description
-        ? productDetailModelObject.description
-        : "";
-      productDetailModel.imageUrl = productDetailModelObject.imageUrl
-        ? productDetailModelObject.imageUrl
-        : "";
-    }
-    return productDetailModel;
+    this.quantity = quantity;
   }
 }

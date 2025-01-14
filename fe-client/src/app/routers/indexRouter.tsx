@@ -16,6 +16,8 @@ import SellComponent from '../pages/sell/SellComponent';
 import Product from '../pages/product/Product';
 import Cart from '../pages/cart/Cart';
 import ProductDetail from '../pages/product/ProductDetail';
+import AccountForm from '../pages/seller/AccountForm';
+import Account from '../pages/seller/Account';
 
 export const indexRouter: any = {
   path: '/',

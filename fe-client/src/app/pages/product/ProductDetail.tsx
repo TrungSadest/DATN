@@ -3,13 +3,16 @@ import { useLocation } from 'react-router-dom';
 import { ProductModel } from '../../model/ProductModel';
 import { PublicService } from '../../services/PublicService';
 import SideBarProduct from './SideBarProduct';
-import { ProductDetailModel } from '../../model/ProductDetailModel';
+import { ColorModel, ProductDetailModel, SizeModel } from '../../model/ProductDetailModel';
 import { generateImageUrl } from '../../utils/imageUtil';
 
 export default function ProductDetail() {
     const location = useLocation();
     const { product } = location.state as { product: ProductModel };
     const [productDetail, setProductDetail] = useState<ProductDetailModel[]>([]);
+    const [selectedColor, setSelectedColor] = useState<ColorModel | undefined>(undefined);
+    const [selectedSize, setSelectedSize] = useState<SizeModel | undefined>(undefined);
+    const [selectedProductDetail, setSelectedProductDetail] = useState<ProductDetailModel>();
     // const [prod, setProd] = useState<ProductModel>();
 
 
@@ -26,6 +29,39 @@ export default function ProductDetail() {
         }
     }, [location, product])
 
+    const uniqueColor = Array.from(
+        new Set(productDetail.map((product) => product.color?.colorCode))
+    ).map((colorCode) => {
+        return productDetail.find((product) => product.color?.colorCode === colorCode)?.color;
+    });
+
+    const uniqueSize = Array.from(
+        new Set(productDetail.map((product) => product.size?.sizeName))
+    ).map((sizeName) => {
+        return productDetail.find((product) => product.size?.sizeName === sizeName)?.size;
+    });
+    const availableSize = selectedColor
+        ? productDetail.filter((product) => product.color?.colorName === selectedColor.colorName)
+            .map((product) => product.size)
+        : uniqueSize;
+
+    const availableColor = selectedSize
+        ? productDetail.filter((product) => product.size?.sizeName === selectedSize.sizeName)
+            .map((product) => product.color)
+        : uniqueColor;
+
+    useEffect(() => {
+        if (selectedColor && selectedSize) {
+            const foundProductDetail = productDetail.find(
+                (productDetail) =>
+                    productDetail.color?.colorId === selectedColor.colorId &&
+                    productDetail.size?.sizeId === selectedSize.sizeId
+            );
+            setSelectedProductDetail(foundProductDetail);
+        }
+    }, [selectedColor])
+
+    console.log(selectedProductDetail);
     return (
         <>
             <div className='container-fluid'>
@@ -35,7 +71,14 @@ export default function ProductDetail() {
                             <div className="row align-items-center">
                                 <div className="col-md-5">
                                     <div className="product-slider-single normal-slider">
-                                        <img src={generateImageUrl(product.thumbnail ?? "")} />
+                                        {selectedProductDetail == null &&
+                                            <img src={generateImageUrl(product.thumbnail ?? "")} style={{ width: "400px" }} />
+                                        }
+                                        {selectedProductDetail != null &&
+                                            <img src={generateImageUrl(selectedProductDetail.imageUrl ?? "")}
+                                                style={{ width: "400px" }}
+                                            />
+                                        }
                                     </div>
 
                                 </div>
@@ -72,25 +115,37 @@ export default function ProductDetail() {
                                             <h4>Quantity:</h4>
                                             <div className="qty">
                                                 <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                <input type="text" value="1" />
+                                                <input type="text" value={selectedProductDetail?.quantity} />
                                                 <button className="btn-plus"><i className="fa fa-plus"></i></button>
                                             </div>
                                         </div>
                                         <div className="p-size">
                                             <h4>Size:</h4>
                                             <div className="btn-group btn-group-sm">
-                                                <button type="button" className="btn">S</button>
-                                                <button type="button" className="btn">M</button>
-                                                <button type="button" className="btn">L</button>
-                                                <button type="button" className="btn">XL</button>
+                                                {availableSize.map((size) => (
+                                                    <button
+                                                        key={size?.sizeId}
+                                                        onClick={() => {
+                                                            setSelectedSize(size);
+                                                            setSelectedColor(undefined);
+                                                        }}
+                                                        type="button" className="btn">{size?.sizeName}</button>
+
+                                                ))}
                                             </div>
                                         </div>
                                         <div className="p-color">
                                             <h4>Color:</h4>
                                             <div className="btn-group btn-group-sm">
-                                                <button type="button" className="btn">White</button>
-                                                <button type="button" className="btn">Black</button>
-                                                <button type="button" className="btn">Blue</button>
+                                                {availableColor.map((color) => (
+                                                    <button
+                                                        key={color?.colorId}
+                                                        onClick={() => {
+                                                            setSelectedColor(color);
+                                                            // setSelectedSize(undefined);
+                                                        }}
+                                                        type="button" className="btn">{color?.colorName}</button>
+                                                ))}
                                             </div>
                                         </div>
                                         <div className="action">
