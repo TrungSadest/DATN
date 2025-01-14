@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { ProductModel } from '../../model/ProductModel';
 import { PublicService } from '../../services/PublicService';
 import SideBarProduct from './SideBarProduct';
+import { ProductDetailModel } from '../../model/ProductDetailModel';
+import { generateImageUrl } from '../../utils/imageUtil';
 
 export default function ProductDetail() {
     const location = useLocation();
     const { product } = location.state as { product: ProductModel };
-
+    const [productDetail, setProductDetail] = useState<ProductDetailModel[]>([]);
     useEffect(() => {
         console.log(product);
         if (product.productId) {
             PublicService.getInstance().getProductDetailByProductId(product.productId).then(res => {
                 console.log(res);
+                setProductDetail(res.data.responseData);
             }).catch(e => {
                 console.log(e);
             })
@@ -28,23 +31,23 @@ export default function ProductDetail() {
                             <div className="row align-items-center">
                                 <div className="col-md-5">
                                     <div className="product-slider-single normal-slider">
-                                        <img src="/assets/img/product-1.jpg" alt="Product Image" />
+                                        <img src={generateImageUrl(product.thumbnail ?? "")} />
                                     </div>
 
                                 </div>
                                 <div className="col-md-7">
                                     <div className="product-content">
-                                        <div className="title"><h2>Product Name</h2></div>
-                                        <div className="ratting">
+                                        <div className="title"><h2>{product.productName}</h2></div>
+                                        {/* <div className="ratting">
                                             <i className="fa fa-star"></i>
                                             <i className="fa fa-star"></i>
                                             <i className="fa fa-star"></i>
                                             <i className="fa fa-star"></i>
                                             <i className="fa fa-star"></i>
-                                        </div>
+                                        </div> */}
                                         <div className="price">
-                                            <h4>Price:</h4>
-                                            <p>$99 <span>$149</span></p>
+                                            <h4>Đơn giá:</h4>
+                                            <p> <span>{product.unitPrice.toLocaleString()}đ</span></p>
                                         </div>
                                         <div className="quantity">
                                             <h4>Quantity:</h4>
