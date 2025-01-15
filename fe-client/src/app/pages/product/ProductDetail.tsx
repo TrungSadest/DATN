@@ -28,9 +28,12 @@ export default function ProductDetail() {
 
         if (existingProductIndex !== -1) {
             // Nếu sản phẩm đã tồn tại, tăng số lượng
-            cart[existingProductIndex].quantity += value;
+            if (((cart[existingProductIndex].quantity ?? 0) + value) < (selectedProductDetail?.quantity ?? 0)) {
+                cart[existingProductIndex].quantity += value;
+                toast.success("Thêm sản phẩm vào giỏ hàng thành công");
+            } else toast.error(`Trong giỏ hàng có ${cart[existingProductIndex].quantity ?? 0} sản phẩm. Không được nhập quá số lượng tồn.`);
+
         } else {
-            // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới với số lượng 1
             cart.push({
                 ...productDetail,
                 quantity: value
@@ -44,7 +47,6 @@ export default function ProductDetail() {
     const handleAddToCart = () => {
         if (selectedProductDetail) {
             saveToCart(selectedProductDetail);
-            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
         } else {
             toast.error("Bạn chưa chọn sản phẩm");
         }
@@ -95,7 +97,7 @@ export default function ProductDetail() {
     }, [selectedColor])
 
     const handlePlus = () => {
-        if (value < (selectedProductDetail?.quantity || 0))
+        if (value < (selectedProductDetail?.quantity ?? 0))
             setValue((prev) => prev + 1);
         else toast.error("Không được nhập quá số lượng tồn");
     };
@@ -219,7 +221,7 @@ export default function ProductDetail() {
                                         </div>
                                         <div className="action">
                                             <a className="btn" onClick={handleAddToCart}><i className="fa fa-shopping-cart"></i>Add to Cart</a>
-                                            <a className="btn" href="#"><i className="fa fa-shopping-bag"></i>Buy Now</a>
+                                            <a className="btn" ><i className="fa fa-shopping-bag"></i>Buy Now</a>
                                         </div>
                                         <div className="mt-3">
                                             <h5>Số lượng tồn: {selectedProductDetail?.quantity}</h5>

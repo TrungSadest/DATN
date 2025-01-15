@@ -28,6 +28,38 @@ export default function Cart() {
         }
     };
 
+    const handleIncreaseQuantity = (productDetailId: string) => {
+        const carts = JSON.parse(localStorage.getItem("cart") || "[]");
+        // Tìm sản phẩm trong giỏ hàng
+        const updatedCart = carts.map((item: any) => {
+            if (item.productDetailId === productDetailId) {
+                return { ...item, quantity: item.quantity + 1 }; // Tăng số lượng sản phẩm
+            }
+            return item;
+        });
+
+        // Lưu lại giỏ hàng đã cập nhật vào localStorage
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    };
+
+    const handleDecreaseQuantity = (productDetailId: string) => {
+        const carts = JSON.parse(localStorage.getItem("cart") || "[]");
+        console.log(productDetailId);
+        // Tìm sản phẩm trong giỏ hàng
+        const updatedCart = carts.map((item: any) => {
+            if (item.productDetailId === productDetailId && item.quantity > 1) {
+                return { ...item, quantity: item.quantity - 1 }; // Giảm số lượng sản phẩm
+            }
+            return item;
+        });
+
+        // Lưu lại giỏ hàng đã cập nhật vào localStorage
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        // Cập nhật lại state hoặc trigger rerender nếu cần
+    };
+
     console.log(carts);
     return (
         <>
@@ -72,11 +104,11 @@ export default function Cart() {
                                                         }
                                                         <td>
                                                             <div className="qty">
-                                                                <button className="btn-minus">
+                                                                <button className="btn-minus" onClick={() => handleDecreaseQuantity(cart.productDetailId)}>
                                                                     <i className="fa fa-minus"></i>
                                                                 </button>
                                                                 <input type="text" value={cart.quantity} readOnly />
-                                                                <button className="btn-plus">
+                                                                <button className="btn-plus" onClick={() => handleIncreaseQuantity(cart.productDetailId)}>
                                                                     <i className="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
