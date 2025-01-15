@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { generateImageUrl } from '../../utils/imageUtil';
 import { ProductDetailModel } from '../../model/ProductDetailModel';
 import { toast } from 'react-toastify';
+import { PublicService } from '../../services/PublicService';
 
 export default function Cart() {
     const carts = JSON.parse(localStorage.getItem("cart") || "[]");
+    const [subtotal, setSubtotal] = useState<number>(0);
     // useEffect(() => {
-    //     console.log(carts);
+    //     carts.map()
     // }, [carts])
     const removeFromCart = (productDetailId: string) => {
         // Lấy giỏ hàng hiện tại từ localStorage
@@ -17,7 +19,7 @@ export default function Cart() {
 
         // Lưu lại giỏ hàng mới vào localStorage
         localStorage.setItem("cart", JSON.stringify(updatedCart));
-
+        setSubtotal(updatedCart);
         console.log(`Đã xóa sản phẩm có id: ${productDetailId} khỏi giỏ hàng.`);
     };
     const handleRemoveProduct = (id: string) => {
@@ -35,12 +37,12 @@ export default function Cart() {
             if (item.productDetailId === productDetailId) {
                 return { ...item, quantity: item.quantity + 1 }; // Tăng số lượng sản phẩm
             }
+
             return item;
         });
-
         // Lưu lại giỏ hàng đã cập nhật vào localStorage
         localStorage.setItem("cart", JSON.stringify(updatedCart));
-
+        setSubtotal(updatedCart);
     };
 
     const handleDecreaseQuantity = (productDetailId: string) => {
@@ -56,10 +58,50 @@ export default function Cart() {
 
         // Lưu lại giỏ hàng đã cập nhật vào localStorage
         localStorage.setItem("cart", JSON.stringify(updatedCart));
-
+        setSubtotal(updatedCart);
         // Cập nhật lại state hoặc trigger rerender nếu cần
     };
 
+    const calculateSubtotal = (cart: any): number => {
+        return cart.reduce((total: any, item: any) => {
+            const price = item.product.discount ? item.product.discountPrice : item.product.unitPrice;
+            return total + price * item.quantity;
+        }, 0);
+    };
+
+    useEffect(() => {
+        const newSubtotal = calculateSubtotal(carts);
+        setSubtotal(newSubtotal);
+    }, [carts]);
+    const handleOrder = () => {
+        if (subtotal == 0) {
+            toast.error("Giỏ hàng trống không thể đặt hàng !");
+            return;
+        }
+        const payload = {
+            userId: 1, // Thay bằng ID khách hàng nếu cần
+            totalPrice: subtotal,
+            orderItems: carts.map((item: any) => ({
+                productDetailId: item.productDetailId,
+                quantity: item.quantity,
+                unitPrice: item.product.unitPrice,
+                discountPrice: item.product.discountPrice
+            })),
+        };
+        PublicService.getInstance()
+            .addOrder(payload)
+            .then(res => {
+                // console.log(res);
+                if (res.data.status) {
+                    localStorage.removeItem("cart");
+                    setSubtotal(0);
+                    toast.success("Đặt hàng thành công");
+                }
+            }).catch(e => {
+                console.log(e);
+            })
+        console.log(payload);
+    };
     console.log(carts);
     return (
         <>
@@ -146,23 +188,23 @@ export default function Cart() {
                         <div className="col-lg-4">
                             <div className="cart-page-inner">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    {/* <div className="col-md-12">
                                         <div className="coupon">
                                             <input type="text" placeholder="Coupon Code" />
                                             <button>Apply Code</button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-md-12">
                                         <div className="cart-summary">
                                             <div className="cart-content">
-                                                <h1>Cart Summary</h1>
-                                                <p>Sub Total<span>$99</span></p>
-                                                <p>Shipping Cost<span>$1</span></p>
-                                                <h2>Grand Total<span>$100</span></h2>
+                                                <h1>Thông tin giỏ hàng</h1>
+                                                {/* <p>Sub Total<span>$99</span></p>
+                                                <p>Shipping Cost<span>$1</span></p> */}
+                                                <h2>Tổng tiền<span>{subtotal.toLocaleString()}đ</span></h2>
                                             </div>
                                             <div className="cart-btn">
                                                 <button>Update Cart</button>
-                                                <button>Checkout</button>
+                                                <button onClick={handleOrder}>Đặt hàng</button>
                                             </div>
                                         </div>
                                     </div>

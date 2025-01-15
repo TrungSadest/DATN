@@ -32,6 +32,12 @@ export default function Aside() {
       </li>
 
       <li className="nav-item">
+        <a className="pointer nav-link collapsed" onClick={()=>{navigate('order')}}>
+          <i className="bi bi-menu-button-wide"></i><span>Order</span>
+        </a>       
+      </li>
+
+      <li className="nav-item">
         <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" >
           <i className="bi bi-journal-text"></i><span>Forms</span><i className="bi bi-chevron-down ms-auto"></i>
         </a>

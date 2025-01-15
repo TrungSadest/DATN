@@ -17,8 +17,9 @@ public class Orders {
         }
     }
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @Column(name = "discount_id")
     private String discountId;
@@ -49,12 +50,12 @@ public class Orders {
         this.orderId = orderId;
     }
 
-    public String getUserId() {
-        return userId;
+    public Users getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     public String getDiscountId() {

@@ -1,11 +1,14 @@
 package com.be.model;
 
+import com.be.entity.OrderItems;
+
 import java.util.Date;
+import java.util.List;
 
 public class OrderModel {
     private String orderId;
 
-    private String userId;
+    private Integer userId;
 
     private String discountId;
 
@@ -21,6 +24,8 @@ public class OrderModel {
 
     private String updatedBy;
 
+    private List<OrderItems> orderItems;
+
     public String getOrderId() {
         return orderId;
     }
@@ -29,11 +34,11 @@ public class OrderModel {
         this.orderId = orderId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -91,5 +96,13 @@ public class OrderModel {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
     }
 }

@@ -1,6 +1,7 @@
 package com.be.controller;
 
 import com.be.entity.Orders;
+import com.be.entity.Users;
 import com.be.model.OrderModel;
 import com.be.model.ResponseData;
 import com.be.repository.OrderItemRepository;
@@ -26,6 +27,8 @@ public class OrderController {
     @Autowired
     private CommonService commonService;
 
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseData> getAll(){
@@ -46,7 +49,8 @@ public class OrderController {
         ResponseData responseData = new ResponseData();
         String userName = commonService.getUserId();
         Orders orders = new Orders();
-        orders.setUserId(orderModel.getUserId());
+        Users users = userRepository.getById(orderModel.getUserId());
+        orders.setUser(users);
         orders.setDiscountId(orderModel.getDiscountId());
         orders.setTotalPrice(orderModel.getTotalPrice());
         orders.setStatus("1");

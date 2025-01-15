@@ -39,6 +39,7 @@ export default function ProductDetail() {
                 quantity: value
                 , product: product
             });
+            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
         }
 
         // Lưu lại giỏ hàng mới vào localStorage

@@ -15,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class OrderItems {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long orderItemId;
 

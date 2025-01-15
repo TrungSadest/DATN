@@ -64,5 +64,8 @@ export class PublicService {
     const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/public/product-detail/get-by/' + productId);
     return axios.get(url);
   }
-
+  public addOrder(request: any) {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + "/public/add-order");
+    return axios.post(url, request)
+  }
 }

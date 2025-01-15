@@ -3,15 +3,15 @@ package com.be.controller;
 import com.be.entity.*;
 import com.be.model.BrandModel;
 import com.be.model.CategoryModel;
+import com.be.model.OrderModel;
 import com.be.model.ResponseData;
-import com.be.repository.BrandRepository;
-import com.be.repository.CategoriRepository;
-import com.be.repository.ProductDetailRepository;
-import com.be.repository.ProductRepository;
+import com.be.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -26,6 +26,12 @@ public class PublicController {
     private BrandRepository brandRepository;
     @Autowired
     private ProductDetailRepository productDetailRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/product/get-all")
     public ResponseEntity<ResponseData> getAllProduct(){
@@ -130,5 +136,41 @@ public class PublicController {
             responseData.setStatus(false);
         }
         return ResponseEntity.ok(responseData)  ;
+    }
+    @PostMapping("/add-order")
+    public ResponseEntity<ResponseData> add (@RequestBody OrderModel orderModel) throws  Exception{
+        ResponseData responseData = new ResponseData();
+//        String userName = commonService.getUserId();
+        Orders orders = new Orders();
+        Users users = userRepository.findById(orderModel.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + orderModel.getUserId()));
+        orders.setUser(users);
+        orders.setTotalPrice(orderModel.getTotalPrice());
+        orders.setStatus("2");
+//        orders.setCreatedBy(userName);
+        orders.setCreatedDate(new Date());
+        String orderId = orderRepository.save(orders).getOrderId();
+        List<OrderItems> orderItems = orderModel.getOrderItems();
+        for (OrderItems itemData : orderItems) {
+            OrderItems orderItem = new OrderItems();
+            orderItem.setOrderId(orderId);
+            orderItem.setProductDetailId(itemData.getProductDetailId());
+            orderItem.setQuantity(itemData.getQuantity());
+            orderItem.setUnitPrice(itemData.getUnitPrice());
+            orderItem.setDiscountPrice(itemData.getDiscountPrice());
+
+            if (itemData.getDiscountPrice() == 0) {
+                orderItem.setTotalPrice(orderItem.getUnitPrice() * orderItem.getQuantity());
+            } else {
+                orderItem.setTotalPrice(orderItem.getDiscountPrice() * orderItem.getQuantity());
+            }
+
+//            orderItems.add(orderItem);
+            orderItemRepository.save(orderItem); // Ensure each orderItem is saved
+        }
+//        orderItemRepository.saveAll(orderItems);
+        responseData.setStatus(true);
+        responseData.setResponseData(orders);
+        return ResponseEntity.ok(responseData);
     }
 }
