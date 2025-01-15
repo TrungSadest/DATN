@@ -5,6 +5,7 @@ import { PublicService } from '../../services/PublicService';
 import SideBarProduct from './SideBarProduct';
 import { ColorModel, ProductDetailModel, SizeModel } from '../../model/ProductDetailModel';
 import { generateImageUrl } from '../../utils/imageUtil';
+import { toast } from 'react-toastify';
 
 export default function ProductDetail() {
     const location = useLocation();
@@ -13,9 +14,41 @@ export default function ProductDetail() {
     const [selectedColor, setSelectedColor] = useState<ColorModel | undefined>(undefined);
     const [selectedSize, setSelectedSize] = useState<SizeModel | undefined>(undefined);
     const [selectedProductDetail, setSelectedProductDetail] = useState<ProductDetailModel>();
+    const [value, setValue] = useState<number>(1);
     // const [prod, setProd] = useState<ProductModel>();
 
+    const saveToCart = (productDetail: ProductDetailModel) => {
+        // Lấy giỏ hàng hiện tại từ localStorage
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
+        // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
+        const existingProductIndex = cart.findIndex(
+            (item: ProductDetailModel) => item.productDetailId === productDetail.productDetailId
+        );
+
+        if (existingProductIndex !== -1) {
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            cart[existingProductIndex].quantity += value;
+        } else {
+            // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới với số lượng 1
+            cart.push({
+                ...productDetail,
+                quantity: value
+                , product: product
+            });
+        }
+
+        // Lưu lại giỏ hàng mới vào localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+    };
+    const handleAddToCart = () => {
+        if (selectedProductDetail) {
+            saveToCart(selectedProductDetail);
+            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
+        } else {
+            toast.error("Bạn chưa chọn sản phẩm");
+        }
+    };
 
     useEffect(() => {
         console.log(product);
@@ -60,6 +93,36 @@ export default function ProductDetail() {
             setSelectedProductDetail(foundProductDetail);
         }
     }, [selectedColor])
+
+    const handlePlus = () => {
+        if (value < (selectedProductDetail?.quantity || 0))
+            setValue((prev) => prev + 1);
+        else toast.error("Không được nhập quá số lượng tồn");
+    };
+
+    const handleMinus = () => {
+        if (value > 1) {
+            setValue((prev) => prev - 1);
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value;
+
+        // Chỉ chấp nhận số nguyên dương
+        const numericValue = parseInt(inputValue, 10);
+
+        if (inputValue === "") {
+            // Nếu người dùng xóa toàn bộ, đặt giá trị tạm thời là 0
+            setValue(0);
+        } else if (!isNaN(numericValue) && numericValue > 0) {
+            if (numericValue <= (selectedProductDetail?.quantity || 0)) {
+                setValue(numericValue); // Giá trị hợp lệ, cập nhật giá trị
+            } else {
+                toast.error("Không được nhập quá số lượng tồn");
+            }
+        }
+    };
 
     console.log(selectedProductDetail);
     return (
@@ -112,11 +175,17 @@ export default function ProductDetail() {
                                             }
                                         </div>
                                         <div className="quantity">
-                                            <h4>Quantity:</h4>
+                                            <h4>Số lượng:</h4>
                                             <div className="qty">
-                                                <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                <input type="text" value={selectedProductDetail?.quantity} />
-                                                <button className="btn-plus"><i className="fa fa-plus"></i></button>
+                                                <button onClick={handleMinus} className="btn-minus"><i className="fa fa-minus"></i></button>
+                                                <input
+                                                    onChange={handleInputChange}
+                                                    onBlur={() => {
+                                                        // Đảm bảo giá trị tối thiểu là 1 khi người dùng rời khỏi ô nhập
+                                                        if (value < 1) setValue(1);
+                                                    }}
+                                                    type="text" value={value} />
+                                                <button onClick={handlePlus} className="btn-plus"><i className="fa fa-plus"></i></button>
                                             </div>
                                         </div>
                                         <div className="p-size">
@@ -149,8 +218,11 @@ export default function ProductDetail() {
                                             </div>
                                         </div>
                                         <div className="action">
-                                            <a className="btn" href="#"><i className="fa fa-shopping-cart"></i>Add to Cart</a>
+                                            <a className="btn" onClick={handleAddToCart}><i className="fa fa-shopping-cart"></i>Add to Cart</a>
                                             <a className="btn" href="#"><i className="fa fa-shopping-bag"></i>Buy Now</a>
+                                        </div>
+                                        <div className="mt-3">
+                                            <h5>Số lượng tồn: {selectedProductDetail?.quantity}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +247,7 @@ export default function ProductDetail() {
                                     <div id="description" className="container tab-pane active">
                                         <h4>Product description</h4>
                                         <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque. Suspendisse sit amet neque neque. Praesent suscipit et magna eu iaculis. Donec arcu libero, commodo ac est a, malesuada finibus dolor. Aenean in ex eu velit semper fermentum. In leo dui, aliquet sit amet eleifend sit amet, varius in turpis. Maecenas fermentum ut ligula at consectetur. Nullam et tortor leo.
+                                            {product.description}
                                         </p>
                                     </div>
                                     <div id="specification" className="container tab-pane fade">

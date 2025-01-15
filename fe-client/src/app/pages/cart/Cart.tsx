@@ -1,6 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { generateImageUrl } from '../../utils/imageUtil';
+import { ProductDetailModel } from '../../model/ProductDetailModel';
+import { toast } from 'react-toastify';
 
 export default function Cart() {
+    const carts = JSON.parse(localStorage.getItem("cart") || "[]");
+    // useEffect(() => {
+    //     console.log(carts);
+    // }, [carts])
+    const removeFromCart = (productDetailId: string) => {
+        // Lấy giỏ hàng hiện tại từ localStorage
+        const carts = JSON.parse(localStorage.getItem("cart") || "[]");
+
+        // Lọc bỏ sản phẩm có id khớp với productId
+        const updatedCart = carts.filter((item: ProductDetailModel) => item.productDetailId !== productDetailId);
+
+        // Lưu lại giỏ hàng mới vào localStorage
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        console.log(`Đã xóa sản phẩm có id: ${productDetailId} khỏi giỏ hàng.`);
+    };
+    const handleRemoveProduct = (id: string) => {
+        const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?");
+        if (confirmDelete) {
+            removeFromCart(id);
+            toast.success("Xóa sản phẩm khỏi giỏ hàng thành công");
+        }
+    };
+
+    console.log(carts);
     return (
         <>
             {/* <!-- Cart Start --> */}
@@ -21,96 +49,63 @@ export default function Cart() {
                                             </tr>
                                         </thead>
                                         <tbody className="align-middle">
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="/assets/img/product-1.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value="1" />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="/assets/img/product-2.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value="1" />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="/assets/img/product-3.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value="1" />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="/assets/img/product-4.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value="1" />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="/assets/img/product-5.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value="1" />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
+                                            {carts.length > 0 ? (
+                                                carts.map((cart: any) => (
+                                                    <tr key={cart.productDetailId}>
+                                                        <td>
+                                                            <div className="img">
+                                                                <img src={generateImageUrl(cart.imageUrl)} alt="Product" />
+                                                                <p>{cart.product.productName}{" - "}
+                                                                    {cart.color.colorName} {" - "}
+                                                                    {cart.size.sizeName}</p>
+                                                            </div>
+                                                        </td>
+                                                        {cart.product.discount === true &&
+                                                            <td>
+                                                                {cart.product.discountPrice.toLocaleString()}đ
+                                                            </td>
+                                                        }
+                                                        {cart.product.discount === false &&
+                                                            <td>
+                                                                {cart.product.unitPrice.toLocaleString()}đ
+                                                            </td>
+                                                        }
+                                                        <td>
+                                                            <div className="qty">
+                                                                <button className="btn-minus">
+                                                                    <i className="fa fa-minus"></i>
+                                                                </button>
+                                                                <input type="text" value={cart.quantity} readOnly />
+                                                                <button className="btn-plus">
+                                                                    <i className="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        {cart.product.discount === true &&
+                                                            <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+                                                                .format(cart.product.discountPrice * cart.quantity)}
+                                                            </td>
+                                                        }
+                                                        {cart.product.discount === false &&
+                                                            <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+                                                                .format(cart.product.unitPrice * cart.quantity)}
+                                                            </td>
+                                                        }
+                                                        <td>
+                                                            <button onClick={() => handleRemoveProduct(cart.productDetailId)}>
+                                                                <i className="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={5} style={{ textAlign: "center" }}>
+                                                        Giỏ hàng trống
+                                                    </td>
+                                                </tr>
+                                            )}
+
                                         </tbody>
                                     </table>
                                 </div>

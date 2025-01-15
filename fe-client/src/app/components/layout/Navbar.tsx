@@ -16,6 +16,7 @@ export default function Navbar() {
     const url = location.pathname;
     const arrUrl = url.split("/");
     const [isCollapseOpen, setCollapseOpen] = useState(false);
+    const carts = JSON.parse(localStorage.getItem("cart") || "[]");
 
     useEffect(() => {
         dispatch(getUserInfo());
@@ -97,7 +98,7 @@ export default function Navbar() {
                     <div className="nav-item">
                         <a onClick={() => { handleMenuClick('/cart') }} className="cart-icon pointer">
                             <i className="bi bi-cart"></i>
-                            <span className="cart-count">3</span>
+                            <span className="cart-count">{carts.length}</span>
                         </a>
                     </div>
 
