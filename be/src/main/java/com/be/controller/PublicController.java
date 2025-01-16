@@ -6,6 +6,7 @@ import com.be.model.CategoryModel;
 import com.be.model.OrderModel;
 import com.be.model.ResponseData;
 import com.be.repository.*;
+import com.be.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,8 @@ public class PublicController {
     private OrderItemRepository orderItemRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CommonService commonService;
 
     @GetMapping("/product/get-all")
     public ResponseEntity<ResponseData> getAllProduct(){
@@ -141,6 +144,10 @@ public class PublicController {
     public ResponseEntity<ResponseData> add (@RequestBody OrderModel orderModel) throws  Exception{
         ResponseData responseData = new ResponseData();
 //        String userName = commonService.getUserId();
+        if (orderModel.getUserId()==null){
+            responseData.setStatus(false);
+            return ResponseEntity.ok(responseData);
+        }
         Orders orders = new Orders();
         Users users = userRepository.findById(orderModel.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + orderModel.getUserId()));

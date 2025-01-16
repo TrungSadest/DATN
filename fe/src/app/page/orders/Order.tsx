@@ -77,7 +77,8 @@ const Order: React.FC = () => {
     <>
       <h3>Hóa đơn</h3>
       <div className="card">
-        <DataTable value={model} tableStyle={{ minWidth: "50rem" }}>
+        <DataTable value={model} paginator
+          rows={8} tableStyle={{ minWidth: "50rem" }}>
           <Column field="orderId" header="Mã hóa đơn"></Column>
           <Column field="user.fullName" header="Khách hàng"></Column>
           <Column field="user.phoneNumber" header="SDT"></Column>

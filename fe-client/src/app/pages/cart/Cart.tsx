@@ -4,14 +4,25 @@ import { ProductDetailModel } from '../../model/ProductDetailModel';
 import { toast } from 'react-toastify';
 import { PublicService } from '../../services/PublicService';
 import { useNavigate } from 'react-router-dom';
+import { getUserInfo } from '../../reducers/userSlice';
 
 export default function Cart() {
     const navigate = useNavigate();
     const carts = JSON.parse(localStorage.getItem("cart") || "[]");
     const [subtotal, setSubtotal] = useState<number>(0);
-    // useEffect(() => {
-    //     carts.map()
-    // }, [carts])
+    const [user, setUser] = useState<string>();
+    useEffect(() => {
+        PublicService.getInstance()
+            .getUserLogin()
+            .then((res) => {
+                setUser(res.data.responseData.userId);
+                // console.log(res.data.responseData);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, [])
+
     const removeFromCart = (productDetailId: string) => {
         // Lấy giỏ hàng hiện tại từ localStorage
         const carts = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -82,8 +93,8 @@ export default function Cart() {
             return;
         }
         const payload = {
-            // userId: 1, // Thay bằng ID khách hàng nếu cần
-            // totalPrice: subtotal,
+            userId: user, // Thay bằng ID khách hàng nếu cần
+            totalPrice: subtotal,
             orderItems: carts.map((item: any) => ({
                 productDetailId: item.productDetailId,
                 quantity: item.quantity,
@@ -91,20 +102,24 @@ export default function Cart() {
                 discountPrice: item.product.discountPrice
             })),
         };
-        navigate("check-out", { state: { payload } });
-        // PublicService.getInstance()
-        //     .addOrder(payload)
-        //     .then(res => {
-        //         // console.log(res);
-        //         if (res.data.status) {
-        //             localStorage.removeItem("cart");
-        //             setSubtotal(0);
-        //             toast.success("Đặt hàng thành công");
-        //         }
-        //     }).catch(e => {
-        //         console.log(e);
-        //     })
-        // console.log(payload);
+        // navigate("check-out", { state: { payload } });
+        PublicService.getInstance()
+            .addOrder(payload)
+            .then(res => {
+                // console.log(res);
+                if (res.data.status) {
+                    localStorage.removeItem("cart");
+                    setSubtotal(0);
+                    toast.success("Đặt hàng thành công");
+                }
+                else {
+                    toast.error("Bạn chưa đăng nhập");
+                    navigate('/login');
+                }
+            }).catch(e => {
+                console.log(e);
+            })
+        console.log(payload);
     };
     console.log(carts);
     return (

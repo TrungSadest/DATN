@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ApiUrlUtil } from '../utils/apiUrlUtil';
 import { UserRoleModel } from '../model/UserRoleModel';
 import { CategoryModel } from '../model/CategoryModel';
+import { HeadersUtil } from '../utils/headersUtil';
 
 export class PublicService {
   private static _publicService: PublicService;
@@ -67,5 +68,11 @@ export class PublicService {
   public addOrder(request: any) {
     const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + "/public/add-order");
     return axios.post(url, request)
+  }
+  public getUserLogin() {
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_AUTH_URL + "/getUser");
+    return axios.get(url, {
+      headers: HeadersUtil.getHeadersAuth(),
+    });
   }
 }

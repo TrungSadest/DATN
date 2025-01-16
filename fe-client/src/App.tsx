@@ -14,6 +14,7 @@ import NotFound from './app/pages/error/NotFound';
 import NotPermission from './app/pages/error/NotPermission';
 import { indexRouter } from './app/routers/indexRouter';
 import Error500 from './app/pages/error/Error500';
+import { authRouter } from './app/routers/authRouter';
 
 export const spinner = (
   <div className="progress-spinner text-center">
@@ -25,6 +26,7 @@ function App() {
   let router = useRoutes([
     { path: 'not-permission', element: <NotPermission /> }, //403
     { path: '/', element: <Navigate to="/dashboard" replace /> },
+    authRouter,
     indexRouter,
     { path: 'err-network', element: <Error500 /> }, //500
     { path: '*', element: <NotFound /> }, //404

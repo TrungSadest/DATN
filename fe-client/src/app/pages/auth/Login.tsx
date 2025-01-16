@@ -1,149 +1,175 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { LoginReq } from '../../model/LoginReq';
-import { AuthService } from '../../services/auth/AuthService';
-import { Constant } from '../../constants/constant';
-import { HttpStatusCode } from 'axios';
-import { AuthConstant } from '../../constants/authConstant';
-import Cookies from 'universal-cookie';
-import { toast } from 'react-toastify';
-import { useAppDispatch } from '../../store/hook';
-import { showAndHideSpinner } from '../../reducers/spinnerSlice';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
+import { HttpStatusCode } from "axios";
+
+import Cookies from "universal-cookie";
+
+import { useAppSelector } from "../../store/hook";
+import { RootState } from "../../store/store";
+import { LoginReq } from "../../model/LoginReq";
+import { AuthConstant } from "../../constants/authConstant";
+import { AuthService } from "../../services/auth/AuthService";
 
 export default function Login() {
-    const cookie = new Cookies();
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const [model, setModel] = useState(new LoginReq('', '', false));
-    const [errors, setErrors] = useState({
-        username: '',
-        password: '',
-    });
+    const cookie = new Cookies();
+    const [model, setModel] = useState(new LoginReq("", "", false));
 
     useEffect(() => {
-        if (cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined && cookie.get(AuthConstant.ACCESS_TOKEN) !== '') {
-            navigate('/');
+        if (
+            cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined &&
+            cookie.get(AuthConstant.ACCESS_TOKEN) !== ""
+        ) {
+            navigate("/");
         }
-    }, [navigate])
+    }, [navigate]);
 
     const changeInput = (data: any) => {
-        const { name, value } = data.target;
+        const value = data.target.value;
+        const name = data.target.name;
         setModel({
             ...model,
             [name]: value,
         });
-
-        setErrors({
-            ...errors,
-            [name]: value.trim() === '' ? 'Không được để trống.' : ''
-        });
     };
-
-    const validate = (): boolean => {
-        const newErrors = { username: '', password: '' };
-        let isValid = true;
-
-        if (model.username.trim() === '') {
-            newErrors.username = 'Không được để trống.';
-            isValid = false;
-        }
-
-        if (model.password.trim() === '') {
-            newErrors.password = 'Không được để trống.';
-            isValid = false;
-        }
-
-        setErrors(newErrors);
-        return isValid;
-    };
-
     const handleLogin = () => {
-        dispatch(showAndHideSpinner(true));
-        if (validate()) {
-            AuthService.getInstance().login(model).then(res => {
-                if (res && res.status === HttpStatusCode.Ok && res.data.status === Constant.OK && res.data.responseData) {
+        AuthService.getInstance()
+            .login(model)
+            .then((res) => {
+                if (
+                    res &&
+                    res.status === HttpStatusCode.Ok &&
+                    res.data.status === true &&
+                    res.data.responseData
+                ) {
+                    const _token = res.data.responseData;
+                    toast.success("Đăng nhập thành công");
                     const expires = new Date();
-                    expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN)
+                    expires.setDate(expires.getDate() + AuthConstant.EXPIRES_TOKEN);
                     cookie.remove(AuthConstant.ACCESS_TOKEN);
-                    cookie.remove(AuthConstant.PUBLIC_KEY);
-                    cookie.set(AuthConstant.ACCESS_TOKEN, res.data.responseData, { path: '/', expires: expires });
-                    toast.success('Đăng nhập thành công');
-                    navigate('/dashboard');
+                    cookie.set(AuthConstant.ACCESS_TOKEN, _token, {
+                        path: "/",
+                        expires: expires,
+                    });
+                    navigate("/");
                 } else {
-                    if (res.data.message) {
-                        if (res.data.message === AuthConstant.USER_NOT_ACTIVE) {
-                            toast.warn('Tài khoản chưa được kích hoạt. Vui lòng kiểm tra mail của bạn để kích hoạt');
-                        }
-                        if (res.data.message === AuthConstant.USER_WRONG_LOGIN) {
-                            toast.warn('Sai tên đăng nhập hoặc mật khẩu');
-                        }
-                    }
+                    toast.warn("Tài khoản hoặc mật khẩu không đúng");
                 }
-            }).catch(e => {
-                toast.error('Lỗi hệ thống')
-            }).finally(() => {
-                dispatch(showAndHideSpinner(false));
             })
-        }
-    }
-
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        // Kiểm tra nếu người dùng nhấn phím Enter
-        if (e.key === 'Enter') {
-            handleLogin(); // Gọi hàm đăng nhập
-        }
+            .catch((e) => {
+                toast.error("Lỗi hệ thống");
+            });
     };
-
     return (
         <>
-            <div className="container-fluid py-5">
+            <main>
                 <div className="container">
-                    <div className="border-start border-5 border-primary ps-5 mb-5">
-                        <h6 className="text-primary text-uppercase">Bất động sản</h6>
-                        <h1 className="display-5 text-uppercase mb-0">Đăng nhập</h1>
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <div className="d-flex flex-column shadow align-items-center bg-light px-4 py-4 col-12 col-lg-8 col-xl-7 col-xxl-5 rounded-3">
-                            <div className='mb-3 w-100'>
-                                <label htmlFor="" className="form-label fs-3">Tài khoản</label>
-                                <input onChange={changeInput} onKeyDown={handleKeyPress} type="text" name='username' className="form-control p-3" placeholder="Nhập tài khoản của bạn" />
-                                {errors.username && <p style={{ color: 'red', margin: '5px 0 0' }}>{errors.username}</p>}
-                            </div>
-                            <div className="mb-4 w-100">
-                                <label htmlFor="" className="form-label fs-3">Mật khẩu</label>
-                                <input onChange={changeInput} onKeyDown={handleKeyPress} type="password" name='password' className="form-control bg-white p-3" placeholder="Nhập mật khẩu" />
-                                {errors.password && <p style={{ color: 'red', margin: '5px 0 0' }}>{errors.password}</p>}
-                            </div>
-                            {/* <div className="w-100 mb-3">
-                                <input className="form-check-input me-2 pointer" type="checkbox" value="" id="flexCheckDefault" />
-                                <label className="form-check-label">
-                                    Ghi nhớ tài khoản
-                                </label>
-                            </div> */}
-                            <div className='w-100 mb-2'>
-                                <button onClick={handleLogin} className="btn btn-primary w-100 py-3">Đăng nhập</button>
-                            </div>
-                            <div className='text-end w-100'>
-                                <a className='pointer link-primary fw-semibold'>Quên mật khẩu?</a>
-                            </div>
-                            <div className="divider w-100">
-                                <div className="line line-primary"></div>
-                                <div className="or border border-primary text-primary">OR</div>
-                                <div className="line line-primary"></div>
-                            </div>
-                            <div className="d-flex mb-3">
-                                <a className="btn btn-outline-primary btn-square me-4 text-google rounded-circle" href="#"><i className="bi bi-google"></i></a>
-                                <a className="btn btn-outline-primary btn-square me-4 text-facebook rounded-circle" href="#"><i className="bi bi-facebook"></i></a>
-                                <a className="btn btn-outline-primary btn-square text-linkedin rounded-circle" href="#"><i className="bi bi-linkedin"></i></a>
-                            </div>
-                            <div>
-                                <span>Bạn chưa có tài khoản?</span>
-                                <a onClick={() => { navigate('/auth/register') }} className='pointer fw-semibold ms-2'>Đăng ký</a>
+                    <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+                        <div className="container">
+                            <div className="row justify-content-center">
+                                <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                                    <div className="d-flex justify-content-center py-4">
+                                        <a
+                                            href="index.html"
+                                            className="logo d-flex align-items-center w-auto"
+                                        >
+                                            <img src="/assets/img/logo-heaven.svg" alt="" />
+                                            <span
+                                                className="fw-bold d-none d-lg-block"
+                                                style={{ color: "#EF8121" }}
+                                            >
+                                                Heaven
+                                            </span>
+                                            <span className="fw-bold d-none d-lg-block">Shop</span>
+                                        </a>
+                                    </div>
+
+                                    <div className="card mb-3">
+                                        <div className="card-body">
+                                            <div className="pt-4 pb-2">
+                                                <h5 className="card-title text-center pb-0 fs-4">
+                                                    Login to Your Account
+                                                </h5>
+                                                <p className="text-center small">
+                                                    Enter your username & password to login
+                                                </p>
+                                            </div>
+
+                                            <div className="row g-3 needs-validation">
+                                                <div className="col-12">
+                                                    <label className="form-label">Username</label>
+                                                    <input
+                                                        onChange={changeInput}
+                                                        type="text"
+                                                        name="username"
+                                                        className="form-control"
+                                                        id="yourUsername"
+                                                    />
+                                                    <div className="invalid-feedback">
+                                                        Please enter your username.
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-12">
+                                                    <label className="form-label">Password</label>
+                                                    <input
+                                                        onChange={changeInput}
+                                                        type="password"
+                                                        name="password"
+                                                        className="form-control"
+                                                        id="yourPassword"
+                                                    />
+                                                    <div className="invalid-feedback">
+                                                        Please enter your password!
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-12">
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="pointer form-check-input"
+                                                            type="checkbox"
+                                                            name="remember"
+                                                            value="true"
+                                                            id="rememberMe"
+                                                        />
+                                                        <label className="form-check-label">
+                                                            Remember me
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className="col-12">
+                                                    <button
+                                                        onClick={handleLogin}
+                                                        className="btn btn-primary w-100"
+                                                    >
+                                                        Login
+                                                    </button>
+                                                </div>
+                                                <div className="col-12">
+                                                    <p className="small mb-0">
+                                                        Don't have account?{" "}
+                                                        <a
+                                                            onClick={() => {
+                                                                navigate("/register");
+                                                            }}
+                                                            className="pointer"
+                                                        >
+                                                            Create an account
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-            </div>
+            </main>
         </>
-    )
+    );
 }

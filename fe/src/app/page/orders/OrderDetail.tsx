@@ -152,9 +152,10 @@ export default function OrderDetail(props: any) {
           )}
         </div>
         <h4>Thông tin hóa đơn: {model.orderId}</h4>
-        <p>nguoi tao: {order.user.fullName}</p>
-        <p>So dien thoai : {order.user.phoneNumber}</p>
-        <p>Ngay tao: {order.createdDate}</p>
+        <p>Người tạo: {order.user.fullName}</p>
+        <p>Só điện thoại : {order.user.phoneNumber}</p>
+        <p>Ngày tạo: {order.createdDate}</p>
+        <p>Địa chỉ: {order.user.address}</p>
         <p></p>
         <h4>Thông tin sản phẩm</h4>
         <div className="card">
@@ -180,7 +181,9 @@ export default function OrderDetail(props: any) {
               body={(rowData) => formatCurrency(rowData.totalPrice)}
             ></Column>
           </DataTable>
+          
         </div>
+        <h5>Tổng hóa đơn: {model.totalPrice.toLocaleString()}đ</h5>
       </div>
     </>
   );

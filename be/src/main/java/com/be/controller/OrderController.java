@@ -9,6 +9,7 @@ import com.be.repository.OrderRepository;
 import com.be.repository.UserRepository;
 import com.be.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,8 @@ public class OrderController {
     public ResponseEntity<ResponseData> getAll(){
         ResponseData responseData = new ResponseData();
         try {
-            List<Orders> list = orderRepository.findAll();
+            List<Orders> list = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
+
             responseData.setResponseData(list);
             responseData.setStatus(true);
         }

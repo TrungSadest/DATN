@@ -38,7 +38,7 @@ export default function Navbar() {
 
     const handleLogout = () => {
         cookie.remove(AuthConstant.ACCESS_TOKEN);
-        navigate('/');
+        navigate('/login');
         window.location.reload();
     }
 
@@ -58,7 +58,12 @@ export default function Navbar() {
         setOpenCart(!openCart);
         setOpenMng(false);
     }
+    useEffect(() => {
+        if (!isLogin) {
+            // navigate('login');
 
+        }
+    }, [])
     return (
         <>
             <nav className="z-999 navbar navbar-expand-lg bg-white navbar-light py-lg-0 px-lg-0 text-center shadow-sm">
@@ -88,6 +93,7 @@ export default function Navbar() {
                                                 <a onClick={() => { handleMenuClick('/mng/account') }} className="pointer dropdown-item">Tài khoản</a>
                                                 <a onClick={() => { handleMenuClick('/mng/license-mng') }} className="pointer dropdown-item">Giấy phép</a>
                                                 <a onClick={() => { handleMenuClick('/mng/license-mng') }} className="pointer dropdown-item">Thống kê</a>
+                                                <button className='btn' onClick={handleLogout} >Logout</button>
                                             </div>
                                         )
                                     }
@@ -96,6 +102,7 @@ export default function Navbar() {
                         </div>
                     </div>
                     <div className="nav-item">
+
                         <a onClick={() => { handleMenuClick('/cart') }} className="cart-icon pointer">
                             <i className="bi bi-cart"></i>
                             <span className="cart-count">{carts.length}</span>

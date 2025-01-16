@@ -9,6 +9,7 @@ import com.be.model.ResponseData;
 import com.be.model.request.LoginRequest;
 import com.be.model.request.RegisterRequest;
 import com.be.repository.UserRepository;
+import com.be.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,10 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -42,6 +40,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CommonService commonService;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseData> login(@RequestBody LoginRequest loginRequest) {
@@ -101,5 +102,14 @@ public class AuthController {
            responseData.setMsgCode(Constants.REGISTER_FAILED);
        }
        return ResponseEntity.ok(responseData);
+    }
+    @GetMapping("/getUser")
+    public ResponseEntity<ResponseData> getUserInfo() throws  Exception{
+        ResponseData responseData = new ResponseData();
+        String userName = commonService.getUserId();
+        Users users = userRepository.findByUsername(userName);
+        responseData.setStatus(true);
+        responseData.setResponseData(users);
+        return ResponseEntity.ok(responseData)  ;
     }
 }

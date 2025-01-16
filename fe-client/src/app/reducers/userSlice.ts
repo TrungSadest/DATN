@@ -11,8 +11,8 @@ const initialState: any = {
   isLogin: cookie.get(AuthConstant.ACCESS_TOKEN) !== undefined && cookie.get(AuthConstant.ACCESS_TOKEN) !== '',
 };
 
-export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
-  return axios.get(process.env.REACT_APP_API_URL + '/user/getUserInfo.exclude', {
+export const getUserInfo = createAsyncThunk('auth/getUserInfo', async () => {
+  return axios.get(process.env.REACT_APP_API_URL + '/auth/getUserInfo', {
     headers: HeadersUtil.getHeadersAuth(),
   });
 });
