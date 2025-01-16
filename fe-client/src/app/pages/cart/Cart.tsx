@@ -3,8 +3,10 @@ import { generateImageUrl } from '../../utils/imageUtil';
 import { ProductDetailModel } from '../../model/ProductDetailModel';
 import { toast } from 'react-toastify';
 import { PublicService } from '../../services/PublicService';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
+    const navigate = useNavigate();
     const carts = JSON.parse(localStorage.getItem("cart") || "[]");
     const [subtotal, setSubtotal] = useState<number>(0);
     // useEffect(() => {
@@ -74,13 +76,14 @@ export default function Cart() {
         setSubtotal(newSubtotal);
     }, [carts]);
     const handleOrder = () => {
+
         if (subtotal == 0) {
             toast.error("Giỏ hàng trống không thể đặt hàng !");
             return;
         }
         const payload = {
-            userId: 1, // Thay bằng ID khách hàng nếu cần
-            totalPrice: subtotal,
+            // userId: 1, // Thay bằng ID khách hàng nếu cần
+            // totalPrice: subtotal,
             orderItems: carts.map((item: any) => ({
                 productDetailId: item.productDetailId,
                 quantity: item.quantity,
@@ -88,19 +91,20 @@ export default function Cart() {
                 discountPrice: item.product.discountPrice
             })),
         };
-        PublicService.getInstance()
-            .addOrder(payload)
-            .then(res => {
-                // console.log(res);
-                if (res.data.status) {
-                    localStorage.removeItem("cart");
-                    setSubtotal(0);
-                    toast.success("Đặt hàng thành công");
-                }
-            }).catch(e => {
-                console.log(e);
-            })
-        console.log(payload);
+        navigate("check-out", { state: { payload } });
+        // PublicService.getInstance()
+        //     .addOrder(payload)
+        //     .then(res => {
+        //         // console.log(res);
+        //         if (res.data.status) {
+        //             localStorage.removeItem("cart");
+        //             setSubtotal(0);
+        //             toast.success("Đặt hàng thành công");
+        //         }
+        //     }).catch(e => {
+        //         console.log(e);
+        //     })
+        // console.log(payload);
     };
     console.log(carts);
     return (

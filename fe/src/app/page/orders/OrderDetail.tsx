@@ -10,8 +10,8 @@ import { Tag } from "primereact/tag";
 
 export default function OrderDetail(props: any) {
   const location = useLocation();
-  const { order } = location.state as { order: OrderModel };
-  const [model, setModel] =useState<OrderModel>(order); 
+  const { order } = location.state as { order: any };
+  const [model, setModel] = useState<OrderModel>(order);
   const [orderItems, setOrderItems] = useState<OrderItemModel[]>([]);
 
   useEffect(() => {
@@ -33,13 +33,21 @@ export default function OrderDetail(props: any) {
     }).format(value);
   };
 
-  const updateOrderStatus = (newStatus: string) => {
+  const updateOrderStatus = (newStatus: string) => {   
     OrderService.getInstance()
       .updateOrderStatus(model.orderId, newStatus) // Thứ tự đúng: orderId, newStatus
       .then((res) => {
-        console.log("Cập nhật trạng thái thành công", res);
-       setModel(res.data.responseData)
-        alert("Trạng thái đã được cập nhật!");
+        if(res.data.status){
+          console.log("Cập nhật trạng thái thành công", res);
+          setModel(res.data.responseData);
+          alert("Trạng thái đã được cập nhật!");
+        }
+        else {
+          setModel(res.data.responseData);
+          alert("Đơn hàng đã bị hủy lúc!" + res.data.responseData.updatedDate);
+        }
+          
+        
       })
       .catch((err) => {
         console.error("Lỗi khi cập nhật trạng thái:", err);
@@ -54,22 +62,28 @@ export default function OrderDetail(props: any) {
         nextStatus = "2";
         break;
       case "2":
-        nextStatus = "3"; 
+        nextStatus = "3";
         break;
       case "3":
         nextStatus = "4";
         break;
       case "4":
-        nextStatus = "5"; 
+        nextStatus = "5";
         break;
       case "5":
-        nextStatus = "6"; 
+        nextStatus = "6";
         break;
       default:
         alert("Không thể thay đổi trạng thái!");
         return;
     }
     updateOrderStatus(nextStatus);
+  };
+
+  const handleCancel = () => {
+    if (window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
+      updateOrderStatus("-1");
+    }
   };
 
   const StatusProgressBar = ({ status }: { status: string }) => {
@@ -88,7 +102,14 @@ export default function OrderDetail(props: any) {
 
     if (currentIndex === -1) {
       console.error("Status không hợp lệ:", status);
-      return <div>Trạng thái không hợp lệ</div>;
+      return (
+        <div           
+            className={`status-step active`}
+          >
+            <div className="cancel-icon">Đã hủy</div>
+            <div className="status-label">{model.updatedDate}</div>
+          </div>
+      )
     }
 
     return (
@@ -105,7 +126,7 @@ export default function OrderDetail(props: any) {
       </div>
     );
   };
-
+  console.log(model);
   return (
     <>
       <div>
@@ -113,15 +134,28 @@ export default function OrderDetail(props: any) {
         <StatusProgressBar status={model.status} />
         <div style={{ margin: "20px 0" }}>
           {model.status !== "6" && model.status !== "-1" && (
-            <Button
-              label="Xác nhận"
-              icon="pi pi-check"
-              className="p-button-success"
-              onClick={handleConfirmStatus}
-            />
+            <>
+              <Button
+                label="Hủy"
+                icon="pi pi-times"
+                className="p-button-danger"
+                onClick={handleCancel}
+                style={{ marginRight: "10px" }}
+              />
+              <Button
+                label="Xác nhận"
+                icon="pi pi-check"
+                className="p-button-success"
+                onClick={handleConfirmStatus}
+              />
+            </>
           )}
         </div>
         <h4>Thông tin hóa đơn: {model.orderId}</h4>
+        <p>nguoi tao: {order.user.fullName}</p>
+        <p>So dien thoai : {order.user.phoneNumber}</p>
+        <p>Ngay tao: {order.createdDate}</p>
+        <p></p>
         <h4>Thông tin sản phẩm</h4>
         <div className="card">
           <DataTable value={orderItems} tableStyle={{ minWidth: "50rem" }}>

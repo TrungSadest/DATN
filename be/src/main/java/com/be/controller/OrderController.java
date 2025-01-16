@@ -81,8 +81,13 @@ public class OrderController {
         ResponseData responseData = new ResponseData();
         Orders orders = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Category not found with ID: " + orderId));
+        if(orders.getStatus().equals("-1")){
+            responseData.setStatus(false);
+            responseData.setResponseData(orders);
+            return ResponseEntity.ok(responseData)  ;
+        };
+        orders.setUpdatedDate(new Date());
         String status = requestBody.get("status");
-        System.out.println("Received status: " + status);
         orders.setStatus(status);
         orderRepository.save(orders);
 

@@ -1784,3 +1784,20 @@ h2 {
   color: #000;
 }
 
+.cancel-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* Kích thước icon */
+  height: 50px;
+  border-radius: 50%; /* Biến icon thành hình tròn */
+  background-color: #f44336; /* Màu nền đỏ để biểu thị hủy */
+  color: white; /* Màu chữ */
+  font-size: 16px; /* Kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+  border: 2px solid #d32f2f; /* Viền đậm hơn */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: transform 0.2s, background-color 0.2s; /* Hiệu ứng chuyển đổi khi hover */
+}
+
