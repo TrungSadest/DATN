@@ -32,6 +32,10 @@ public class Products {
     @JoinColumn(name = "category_id")
     private Categories categories;
 
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brands brands;
+
     @Column(name = "discount_price")
     private Long discountPrice;
 
@@ -43,12 +47,6 @@ public class Products {
 
     @Column(name = "is_special")
     private Boolean isSpecial;
-
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    @JsonIgnore
-    private Brands brands;
-
 
     @Column(name = "weight")
     private Long weight;

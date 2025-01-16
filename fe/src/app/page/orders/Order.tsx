@@ -6,6 +6,7 @@ import { Tag } from "primereact/tag";
 import { OrderService } from "../../service/OrderService";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import { OrderModel } from "../../model/OrderModel";
 
 const Order: React.FC = () => {
   const navigate = useNavigate();
@@ -25,9 +26,17 @@ const Order: React.FC = () => {
   const getStatus = (order: any) => {
     switch (order.status) {
       case "1":
-        return "Đã thanh toán";
+        return "Hoàn thành";
       case "2":
         return "Chờ xác nhận";
+      case "3":
+        return "Đang chuẩn bị hàng";
+      case "4":
+        return "Đang giao hàng";
+      case "5":
+        return "Giao hàng thành công";
+      case "6":
+        return "Hoàn thành";
       case "-1":
         return "Đã hủy";
       default:
@@ -41,7 +50,8 @@ const Order: React.FC = () => {
         return "success";
       case "2":
         return "info";
-
+      case "6":
+        return "success";
       case "-1":
         return "danger";
       default:
@@ -60,7 +70,7 @@ const Order: React.FC = () => {
     }).format(value);
   };
 
-  const viewDetail = (order: any) => {
+  const viewDetail = (order: OrderModel) => {
     navigate("detail", { state: { order } });
   };
   return (
@@ -83,7 +93,12 @@ const Order: React.FC = () => {
             body={(rowData) => (
               <>
                 <div className="d-flex ">
-                  <Button className="p-button-success" onClick={() => {viewDetail(rowData)}}>
+                  <Button
+                    className="p-button-success"
+                    onClick={() => {
+                      viewDetail(rowData);
+                    }}
+                  >
                     <i className="bi bi-info-circle"></i>
                   </Button>
                 </div>

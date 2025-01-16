@@ -17,8 +17,6 @@ public class Brands {
     @Column(name = "logo")
     private String logo;
 
-    @OneToMany(mappedBy = "brands")
-    private List<Products> products = new ArrayList<>();
 
     public Integer getBrandId() {
         return brandId;
@@ -44,11 +42,5 @@ public class Brands {
         this.logo = logo;
     }
 
-    public List<Products> getProducts() {
-        return products;
-    }
 
-    public void setProducts(List<Products> products) {
-        this.products = products;
-    }
 }

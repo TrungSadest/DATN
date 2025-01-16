@@ -1,8 +1,8 @@
 package com.be.controller;
 
-import com.be.entity.Orders;
-import com.be.entity.Users;
+import com.be.entity.*;
 import com.be.model.OrderModel;
+import com.be.model.ProductModel;
 import com.be.model.ResponseData;
 import com.be.repository.OrderItemRepository;
 import com.be.repository.OrderRepository;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/order")
@@ -60,5 +61,33 @@ public class OrderController {
         responseData.setStatus(true);
         responseData.setResponseData(orders);
         return ResponseEntity.ok(responseData);
+    }
+    @GetMapping("/get-order-by/{orderId}")
+    public ResponseEntity<ResponseData> getAllOrderById(@PathVariable String orderId){
+        ResponseData responseData = new ResponseData();
+        try {
+            List<OrderItems> orderItems = orderItemRepository.findOrderItemsByOrderId(orderId);
+            responseData.setStatus(true);
+            responseData.setResponseData(orderItems);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseData.setStatus(false);
+        }
+        return ResponseEntity.ok(responseData);
+    }
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<ResponseData> updateStatus (@PathVariable String orderId, @RequestBody Map<String, String> requestBody){
+        ResponseData responseData = new ResponseData();
+        Orders orders = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Category not found with ID: " + orderId));
+        String status = requestBody.get("status");
+        System.out.println("Received status: " + status);
+        orders.setStatus(status);
+        orderRepository.save(orders);
+
+        responseData.setStatus(true);
+        responseData.setResponseData(orders);
+        return ResponseEntity.ok(responseData)  ;
     }
 }

@@ -1,36 +1,22 @@
-package com.be.entity;
+package com.be.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.be.entity.ProductDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
-@Entity
-@Table(name = "order_items")
-public class OrderItems {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
+public class OrderItemModel {
     private Long orderItemId;
 
-    @Column(name = "order_id")
     private String orderId;
 
-    @Column(name = "product_detail_id")
-    private String productDetailId;
+    private String productDetaiId;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "unit_price")
     private Long unitPrice;
 
-    @Column(name = "discount_price")
     private Long discountPrice;
 
-    @Column(name = "total_price")
     private Long totalPrice;
 
     public Long getOrderItemId() {
@@ -49,12 +35,12 @@ public class OrderItems {
         this.orderId = orderId;
     }
 
-    public String getProductDetailId() {
-        return productDetailId;
+    public String getProductDetaiId() {
+        return productDetaiId;
     }
 
-    public void setProductDetailId(String productDetailId) {
-        this.productDetailId = productDetailId;
+    public void setProductDetaiId(String productDetaiId) {
+        this.productDetaiId = productDetaiId;
     }
 
     public Integer getQuantity() {
