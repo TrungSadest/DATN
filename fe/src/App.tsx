@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from "react";
 import "./App.css";
 import { indexRouter } from "./app/router/indexRouter";
+import { authRouter } from "./app/router/authRouter";
 import { ToastContainer } from "react-toastify";
 
 import { Navigate, useRoutes } from "react-router-dom";
@@ -20,6 +21,7 @@ function App() {
   let router = useRoutes([
     { path: "not-permission", element: <NotPermission /> }, //403
     { path: "/", element: <Navigate to="/dashboard" replace /> },
+    authRouter,
     indexRouter,
     { path: "err-network", element: <Error500 /> }, //500
     { path: "*", element: <NotFound /> }, //404

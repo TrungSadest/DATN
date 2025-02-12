@@ -1,0 +1,204 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .width-dialog {
+    width: 50vw;
+  }
+
+  .large-dialog {
+    width: 75vw;
+  }
+
+  .x-large-dialog {
+    width: 90vw;
+  }
+}
+
+/* @import './assets/css/bootstrap.min.css';
+@import './assets/css/icons.min.css';
+@import './assets/css/app.min.css';
+@import './assets/css/custom.min.css'; */
+
+@import 'react-toastify/dist/ReactToastify.css';
+@import './assets/font/xeicon/xeicon.min.css';
+
+.pointer {
+  cursor: pointer;
+}
+
+.z-1 {
+  z-index: 1 !important;
+}
+
+.z-2 {
+  z-index: 2 !important;
+}
+
+.z-3 {
+  z-index: 3 !important;
+}
+
+.z-10 {
+  z-index: 10 !important;
+}
+
+.z-100 {
+  z-index: 100 !important;
+}
+
+.z-999 {
+  z-index: 999 !important;
+}
+
+/* Css sign in and sign up */
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.line {
+  height: 1px;
+  flex: 1;
+}
+
+.line {
+  height: 1px;
+  flex: 1;
+}
+
+/* Line Primary */
+.line-primary {
+  background-color: #ee4d2d;
+  /* Màu xanh lam */
+}
+
+/* Line Danger */
+.line-danger {
+  background-color: #e21d34;
+  /* Màu đỏ */
+}
+
+/* Line Warning */
+.line-warning {
+  background-color: #ff9300;
+  /* Màu vàng */
+}
+
+/* Line Success */
+.line-success {
+  background-color: #28a745;
+  /* Màu xanh lá */
+}
+
+/* Line Info */
+.line-info {
+  background-color: #1877f2;
+  /* Màu xanh dương nhạt */
+}
+
+/* Line Dark */
+.line-dark {
+  background-color: #343a40;
+  /* Màu xám đen */
+}
+
+.or {
+  padding: 0 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.text-google {
+  color: #db4437;
+}
+
+.text-facebook {
+  color: #1877f2;
+}
+
+.text-linkedin {
+  color: #165ea5;
+}
+
+.divider-pro {
+  /* width: 1px;
+  height: 15px;
+  background-color: #ccc;
+  margin: 0 10px; */
+  position: absolute;
+  border-left: 1px solid hsla(0, 0%, 100%, 0.22);
+  /* Thanh dọc giữa */
+  border-right: 1px solid hsla(0, 0%, 100%, 0.22);
+  /* Thanh dọc giữa */
+  height: 0.9375rem;
+  /* Chiều cao thanh */
+  top: 50%;
+  left: -6px;
+  /* Điều chỉnh vị trí ngang của thanh */
+  width: 0;
+  transform: translateY(-50%);
+}
+
+.cart-icon {
+  position: relative;
+  font-size: 24px;
+  color: #ff5722; /* Màu cam giống Shopee */
+  text-decoration: none;
+}
+
+.cart-icon .cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #ff5722;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  line-height: 1;
+  text-align: center;
+}
+
+@import 'react-toastify/dist/ReactToastify.css';
